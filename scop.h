@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:10:10 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/23 17:32:58 by vroche           ###   ########.fr       */
+/*   Updated: 2017/03/24 13:12:28 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "mlx.h"
 # include "mlx_opengl.h"
 # include <OpenGL/gl3.h>
+# include "math.h"
 
 # define LENGHT 1024
 # define HEIGHT 768

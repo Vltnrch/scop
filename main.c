@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:09:46 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/23 17:52:43 by vroche           ###   ########.fr       */
+/*   Updated: 2017/03/24 13:04:34 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,19 @@ GLuint	load_shaders(void)
 	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 	GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-	const char	*VertexShaderCode = "#version 410 core\nlayout(location = 0) in vec3 vertexPosition_modelspace;\nvoid main(){gl_Position.xyz = vertexPosition_modelspace;gl_Position.w = 1.0;}";
-	const char	*FragmentShaderCode = "#version 410 core\nout vec3 color;\nvoid main(){color = vec3(1,0,0);}";
+	const char	*VertexShaderCode = 
+	"#version 410\n"
+	"layout(location = 0) in vec3 vertexPosition_modelspace;"
+	"uniform mat4 MVP;"
+	"void main() {"
+	"	gl_Position = vec4(vertexPosition_modelspace,1);"
+	"}";
+	const char	*FragmentShaderCode = 
+	"#version 410\n"
+	"out vec4 frag_colour;"
+	"void main() {"
+	"	frag_colour = vec4(0.5, 0.0, 0.5, 1.0);"
+	"}";
 
 	GLint Result = GL_FALSE;
 	int InfoLogLength;
@@ -90,10 +101,11 @@ void	ft_scop(t_scop *scop)
 
 	// An array of 3 vectors which represents 3 vertices
 	static const GLfloat g_vertex_buffer_data[] = {
-	-1.0f, -1.0f, 0.0f,
-	1.0f, -1.0f, 0.0f,
-	0.0f,  1.0f, 0.0f,
+	 0.0f,  0.5f,  0.0f,
+	 0.5f, -0.5f,  0.0f,
+	-0.5f, -0.5f,  0.0f
 	};
+
 
 	// This will identify our vertex buffer
 	GLuint vertexbuffer;
@@ -103,6 +115,7 @@ void	ft_scop(t_scop *scop)
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	// Give our vertices to OpenGL.
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);
@@ -132,6 +145,11 @@ int	main(void)
 	if (!(scop.win = mlx_new_opengl_window(scop.mlx, LENGHT, HEIGHT, "Scop / OpenGL 4.1")))
 		ft_perror_exit("mlx_new_window() fails to create a new window\n");
 	mlx_opengl_window_set_context(scop.win);
+
+	const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
+	const GLubyte* version = glGetString(GL_VERSION); // version as a string
+	ft_printf("Renderer: %s\n", renderer);
+	ft_printf("OpenGL version supported %s\n", version);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Create and compile our GLSL program from the shaders

@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:17:40 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/23 17:22:21 by vroche           ###   ########.fr       */
+/*   Updated: 2017/03/24 12:44:03 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		key_hook(int keycode, t_scop *scop)
 
 int		ft_expose(t_scop *scop)
 {
-	ft_printf("expose %x", scop);
+	ft_printf("expose %x\n", scop);
 	return (0);
 }
 
