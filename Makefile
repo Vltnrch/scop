@@ -6,7 +6,7 @@
 #    By: vroche <vroche@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/03/16 10:49:38 by vroche            #+#    #+#              #
-#    Updated: 2017/03/23 17:58:41 by vroche           ###   ########.fr        #
+#    Updated: 2017/03/27 16:48:18 by vroche           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,10 +17,12 @@ LIB = -framework OpenGL -framework AppKit \
 
 HDR = -I./minilibx_macos -I./libft/includes
 
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra -g
 
 C = main.c \
-	scop_manage.c
+	scop_manage.c \
+	matrix.c \
+	vector.c
 
 O = $(C:.c=.o)
 
