@@ -6,7 +6,7 @@
 #    By: vroche <vroche@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/03/16 10:49:38 by vroche            #+#    #+#              #
-#    Updated: 2017/03/27 16:48:18 by vroche           ###   ########.fr        #
+#    Updated: 2017/03/28 14:23:43 by vroche           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,8 @@ FLAGS = -Wall -Werror -Wextra -g
 C = main.c \
 	scop_manage.c \
 	matrix.c \
+	scop_key.c \
+	scop_mouse.c \
 	vector.c
 
 O = $(C:.c=.o)

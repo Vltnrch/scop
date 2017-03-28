@@ -6,13 +6,13 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 16:12:16 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/27 19:38:54 by vroche           ###   ########.fr       */
+/*   Updated: 2017/03/28 10:53:31 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scop.h"
+#include "vector.h"
 
-t_vect	vect_make(GLfloat x, GLfloat y, GLfloat z)
+t_vect	vect_make(float x, float y, float z)
 {
 	t_vect	result;
 
@@ -22,43 +22,40 @@ t_vect	vect_make(GLfloat x, GLfloat y, GLfloat z)
 	result.w = 1.0f;
 	return (result);
 }
+//param v must be v[x y z]
+float	vect_lenght(t_vect v)
+{
+	return (sqrt(v.x * v.x + v.y * v.y + v.z * v.z));
+}
 
 //param v must be v[x y z]
-t_vect	normalize(t_vect v)
+t_vect	vect_normalize(t_vect v)
 {
-	float len = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-	t_vect	result;
+	float len = vect_lenght(v);
 
-	result.x = v.x / len;
-	result.y = v.y / len;
-	result.z = v.z / len;
-	return (result);
+	return (vect_make(v.x / len, v.y / len, v.z / len));
 }
 
 //param v and w must be v[x y z]
-t_vect	cross(t_vect v, t_vect w)
+t_vect	vect_cross(t_vect v, t_vect w)
 {
-	t_vect	result;
-
-	result.x = v.y * w.z - v.z * w.y;
-	result.y = v.z * w.x - v.x * w.z;
-	result.z = v.x * w.y - v.y * w.x;
-	return (result);
+	return (vect_make(v.y * w.z - v.z * w.y, v.z * w.x - v.x * w.z, v.x * w.y - v.y * w.x));
 }
 
 //param v and w must be v[x y z]
-t_vect	sub(t_vect v, t_vect w)
+t_vect	vect_sub(t_vect v, t_vect w)
 {
-	t_vect	result;
-
-	result.x = v.x - w.x;
-	result.y = v.y - w.y;
-	result.z = v.z - w.z;
-	return (result);
+	return (vect_make(v.x - w.x, v.y - w.y, v.z - w.z));
 }
 
 //param v and w must be v[x y z]
-GLfloat		dot(t_vect v, t_vect w)
+t_vect	vect_add(t_vect v, t_vect w)
+{
+	return (vect_make(v.x + w.x, v.y + w.y, v.z + w.z));
+}
+
+//param v and w must be v[x y z]
+float		vect_dot(t_vect v, t_vect w)
 {
 	return (v.x * w.x + v.y * w.y + v.z * w.z);
 }
