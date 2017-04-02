@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/24 13:10:55 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/28 19:16:13 by vroche           ###   ########.fr       */
+/*   Updated: 2017/03/29 12:44:55 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ float	*mtx_make_44(float v)
 	i = 0;
 	while (i < 16)
 		result[i++] = 0.0f;
+	result[0] = v;
+	result[5] = v;
+	result[10] = v;
 	result[15] = v;
 	return (result);
 }
@@ -133,7 +136,7 @@ float	*mtx_rotate(float *m, float a, t_vect v)
 	float s = sin(a);
 
 	t_vect	axis = vect_normalize(v);
-	t_vect	temp = (1.0f - c) * axis;
+	t_vect	temp = vect_make((1.0f - c) * axis.x, (1.0f - c) * axis.y, (1.0f - c) * axis.z);
 
 	float	*rotate = mtx_make_44(0.0f);
 	rotate[0] = c + temp.x * axis.x;

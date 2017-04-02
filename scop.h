@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:10:10 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/28 16:28:14 by vroche           ###   ########.fr       */
+/*   Updated: 2017/03/31 19:54:05 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,15 @@
 
 # include "libft.h"
 # include "ft_printf.h"
+# include "get_next_line.h"
 # include "matrix.h"
 # include "vector.h"
 # include "mlx.h"
 # include "mlx_opengl.h"
 # include <OpenGL/gl3.h>
 # include "math.h"
+# include <fcntl.h>
+# include <sys/mman.h>
 
 # define WIDTH 1024
 # define HEIGHT 768
@@ -37,49 +40,8 @@
 # define MOUSE_SD 4
 # define MOUSE_SU 5
 
-// Our vertices. Tree consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
-// A cube has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
-static const GLfloat g_vertex_buffer_data[] = { 
-	-1.0f,-1.0f,-1.0f,
-	-1.0f,-1.0f, 1.0f,
-	-1.0f, 1.0f, 1.0f,
-	 1.0f, 1.0f,-1.0f,
-	-1.0f,-1.0f,-1.0f,
-	-1.0f, 1.0f,-1.0f,
-	 1.0f,-1.0f, 1.0f,
-	-1.0f,-1.0f,-1.0f,
-	 1.0f,-1.0f,-1.0f,
-	 1.0f, 1.0f,-1.0f,
-	 1.0f,-1.0f,-1.0f,
-	-1.0f,-1.0f,-1.0f,
-	-1.0f,-1.0f,-1.0f,
-	-1.0f, 1.0f, 1.0f,
-	-1.0f, 1.0f,-1.0f,
-	 1.0f,-1.0f, 1.0f,
-	-1.0f,-1.0f, 1.0f,
-	-1.0f,-1.0f,-1.0f,
-	-1.0f, 1.0f, 1.0f,
-	-1.0f,-1.0f, 1.0f,
-	 1.0f,-1.0f, 1.0f,
-	 1.0f, 1.0f, 1.0f,
-	 1.0f,-1.0f,-1.0f,
-	 1.0f, 1.0f,-1.0f,
-	 1.0f,-1.0f,-1.0f,
-	 1.0f, 1.0f, 1.0f,
-	 1.0f,-1.0f, 1.0f,
-	 1.0f, 1.0f, 1.0f,
-	 1.0f, 1.0f,-1.0f,
-	-1.0f, 1.0f,-1.0f,
-	 1.0f, 1.0f, 1.0f,
-	-1.0f, 1.0f,-1.0f,
-	-1.0f, 1.0f, 1.0f,
-	 1.0f, 1.0f, 1.0f,
-	-1.0f, 1.0f, 1.0f,
-	 1.0f,-1.0f, 1.0f
-};
-
 // One color for each vertex. They were generated randomly.
-static const GLfloat g_color_buffer_data[] = { 
+/*static const GLfloat g_color_buffer_data[] = { 
 	0.583f,  0.771f,  0.014f,
 	0.609f,  0.115f,  0.436f,
 	0.327f,  0.483f,  0.844f,
@@ -116,14 +78,24 @@ static const GLfloat g_color_buffer_data[] = {
 	0.673f,  0.211f,  0.457f,
 	0.820f,  0.883f,  0.371f,
 	0.982f,  0.099f,  0.879f
+};*/
+static const GLfloat g_color_buffer_data[] = { 
+	68 /255.0f, 68/255.0f, 68/255.0f,
+	68 /255.0f, 68/255.0f, 68/255.0f,
+	68 /255.0f, 68/255.0f, 68/255.0f,
+	102/255.0f, 102/255.0f, 102/255.0f,
+	102/255.0f, 102/255.0f, 102/255.0f,
+	102/255.0f, 102/255.0f, 102/255.0f
 };
-
 typedef struct		s_gl
 {
 	GLuint			program_id;
 	GLfloat			*projection;
 	GLfloat			*view;
-	GLuint			mvp_id;
+	GLfloat			*model;
+	GLuint			m_id;
+	GLuint			v_id;
+	GLuint			p_id;
 	GLuint			vertexbuffer;
 	GLuint			colorbuffer;
 }					t_gl;
@@ -138,15 +110,31 @@ typedef struct		s_mk
 	int				yprev;
 }					t_mk;
 
+typedef struct		s_ctn
+{
+	void			*ctn;
+	int				size;
+	int				w;
+}					t_ctn;
+
+typedef struct		s_obj
+{
+	t_ctn			vertices;
+	t_ctn			uvs;
+	t_ctn			normals;
+}					t_obj;
+
 typedef struct		s_scop
 {
 	void			*mlx;
 	void			*win;
 	t_mk			mk;
 	t_gl			gl;
-	t_vect			position;
+	t_obj			obj;
+	float			theta;
+	float			phi;
+	float			zoom;
 }					t_scop;
-
 
 int					scop_expose(t_scop *scop);
 void				ft_perror_exit(const char *str);
@@ -159,5 +147,17 @@ int					scop_key_press(int keycode, t_scop *scop);
 int					scop_mouse_release(int keycode, int x, int y, t_scop *scop);
 int					scop_mouse_press(int keycode, int x, int y, t_scop *scop);
 int					scop_mouse_motion(int x, int y, t_scop *scop);
+
+void				make_ctn_f(t_ctn *ctn, int size);
+void				realoc_ctn_f(t_ctn *ctn);
+void				add_ctn_f(t_ctn *ctn, float add);
+void				make_ctn(t_ctn *ctn, int size);
+void				realoc_ctn(t_ctn *ctn);
+void				add_ctn(t_ctn *ctn, unsigned int add);
+
+void				scop_init(t_scop *scop);
+void 				loadOBJ(char *path, t_scop * scop);
+
+void				load_shaders(t_scop *scop);
 
 #endif

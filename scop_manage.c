@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:17:40 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/28 16:29:25 by vroche           ###   ########.fr       */
+/*   Updated: 2017/03/31 15:27:28 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,14 @@
 int		scop_expose(t_scop *scop)
 {
 
-	// Model matrix : an identity matrix (model will be at the origin)
-	//glm::mat4 Model = glm::mat4(1.0f);
-	// Our ModelViewProjection : multiplication of our 3 matrices
-	GLfloat			*mvp = mtx_make_44(0.0f);
-	mtx_dot(scop->gl.view, scop->gl.projection, mvp);
-
-	// Send our transformation to the currently bound shader, 
 	// in the "MVP" uniform
-	glUniformMatrix4fv(scop->gl.mvp_id, 1, GL_FALSE, mvp);
-
+	glUniformMatrix4fv(scop->gl.m_id, 1, GL_FALSE, scop->gl.model);
+	glUniformMatrix4fv(scop->gl.v_id, 1, GL_FALSE, scop->gl.view);
+	glUniformMatrix4fv(scop->gl.p_id, 1, GL_FALSE, scop->gl.projection);
 	// Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	// Use our shader
 	glUseProgram(scop->gl.program_id);
-
-
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, scop->gl.vertexbuffer);
@@ -43,7 +34,6 @@ int		scop_expose(t_scop *scop)
 		0,                  // stride
 		(void*)0            // array buffer offset
 	);
-
 	// 2nd attribute buffer : colors
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, scop->gl.colorbuffer);
@@ -55,86 +45,65 @@ int		scop_expose(t_scop *scop)
 		0,                                // stride
 		(void*)0                          // array buffer offset
 	);
-
 	// Draw the triangle !
-	glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indices starting at 0 -> 12 triangles
+
+	glDrawArrays(GL_TRIANGLES, 0, scop->obj.vertices.w); // 12*3 indices starting at 0 -> 12 triangles
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
-
-
 	mlx_opengl_swap_buffers(scop->win);
-
 	return (0);
+}
+
+void		scop_key_event(t_scop *scop)
+{
+	if (scop->mk.key[KEY_ESCAPE])
+		exit(0);
+}
+
+void		scop_mouse_event(t_scop *scop)
+{
+	static float mouseSpeed = 0.1f;
+
+	if (scop->mk.y != scop->mk.yprev || scop->mk.x != scop->mk.xprev)
+	{
+		scop->phi += mouseSpeed * (float)(scop->mk.y - scop->mk.yprev);
+		scop->theta += mouseSpeed * (float)(scop->mk.x - scop->mk.xprev);
+		scop->mk.xprev = scop->mk.x;
+		scop->mk.yprev = scop->mk.y;
+	}
+	if (scop->phi > M_PI / 2)
+		scop->phi = M_PI / 2;
+	if (scop->phi < -M_PI / 2)
+		scop->phi = -M_PI / 2;
+	if (scop->mk.mouse[MOUSE_SD])
+		scop->zoom -= mouseSpeed * 5;
+	else if (scop->mk.mouse[MOUSE_SU])
+		scop->zoom += mouseSpeed * 5;
+	scop->mk.mouse[MOUSE_SD] = 0;
+	scop->mk.mouse[MOUSE_SU] = 0;
 }
 
 int			scop_loop(t_scop *scop)
 {
-	static float speed = 0.1f; // 3 units / second
-	static float horizontalAngle = 3.14f;
-			// Initial vertical angle : none
-	static float verticalAngle = 0.0f;
-	static float mouseSpeed = 0.001f;
+	float	*result;
 
-	// Compute new orientation
-	horizontalAngle += mouseSpeed * (float)(scop->mk.x - scop->mk.xprev);
-	verticalAngle   += mouseSpeed * (float)(scop->mk.y - scop->mk.yprev);
-	scop->mk.xprev = scop->mk.x;
-	scop->mk.yprev = scop->mk.y;
-	t_vect	direction = vect_make(cos(verticalAngle) * sin(horizontalAngle), \
-					sin(verticalAngle), cos(verticalAngle) * cos(horizontalAngle));
-	t_vect	right = vect_make(sin(horizontalAngle - 3.14f/2.0f), 0.0f,
-					cos(horizontalAngle - 3.14f/2.0f));
-	t_vect	up = vect_cross(right, direction);
-	if (scop->mk.key[KEY_ESCAPE])
-		exit(0);
-	if (scop->mk.mouse[MOUSE_SU])
-	{
-		scop->position.x += direction.x /** deltaTime*/ * speed;
-		scop->position.y += direction.y /** deltaTime*/ * speed;
-		scop->position.z += direction.z /** deltaTime*/ * speed;
-		scop->mk.mouse[MOUSE_SU] = 0;
-	}
-	if (scop->mk.mouse[MOUSE_SD])
-	{
-		scop->position.x -= direction.x /** deltaTime*/ * speed;
-		scop->position.y -= direction.y /** deltaTime*/ * speed;
-		scop->position.z -= direction.z /** deltaTime*/ * speed;
-		scop->mk.mouse[MOUSE_SD] = 0;
-	}
-	if (scop->mk.key[KEY_UP])
-	{
-		scop->position.x += up.x /** deltaTime*/ * speed;
-		scop->position.y += up.y /** deltaTime*/ * speed;
-		scop->position.z += up.z /** deltaTime*/ * speed;
-	}
-	if (scop->mk.key[KEY_DOWN])
-	{
-		scop->position.x -= up.x /** deltaTime*/ * speed;
-		scop->position.y -= up.y /** deltaTime*/ * speed;
-		scop->position.z -= up.z /** deltaTime*/ * speed;
-	}
-	if (scop->mk.key[KEY_LEFT])
-	{
-		scop->position.x -= right.x /** deltaTime*/ * speed;
-		scop->position.y -= right.y /** deltaTime*/ * speed;
-		scop->position.z -= right.z /** deltaTime*/ * speed;
-	}
-	if (scop->mk.key[KEY_RIGHT])
-	{
-		scop->position.x += right.x /** deltaTime*/ * speed;
-		scop->position.y += right.y /** deltaTime*/ * speed;
-		scop->position.z += right.z /** deltaTime*/ * speed;
-	}
-	// Camera matrix
-	free(scop->gl.view);
-	scop->gl.view = mtx_lookat(scop->position, vect_add(scop->position, direction), up);
+	scop_mouse_event(scop);
+	scop_key_event(scop);
+	result = mtx_make_44(1.0f);
+	free(scop->gl.model);
+	scop->gl.model = mtx_translate(result, vect_make(0.0f, 0.0f, 1.0f + scop->zoom));
+	free(result);
+	result = mtx_rotate(scop->gl.model, scop->phi, vect_make(1.0f, 0.0f, 0.0f));
+	free(scop->gl.model);
+	scop->gl.model = mtx_rotate(result, scop->theta, vect_make(0.0f, 1.0f, 0.0f));
+	free(result);
 	scop_expose(scop);
 	return (0);
 }
 
 void	ft_perror_exit(const char *str)
 {
-	ft_dprintf(2, "Error: %s\n", str);
+	perror(str);
 	exit(EXIT_FAILURE);
 }
