@@ -6,7 +6,7 @@
 #    By: vroche <vroche@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/03/16 10:49:38 by vroche            #+#    #+#              #
-#    Updated: 2017/03/31 11:53:52 by vroche           ###   ########.fr        #
+#    Updated: 2017/04/04 16:50:42 by vroche           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,12 +23,11 @@ C = main.c \
 	scop_init.c \
 	scop_manage.c \
 	load_shaders.c \
-	matrix.c \
+	mtx.c \
 	scop_key.c \
 	scop_mouse.c \
 	load_obj.c \
-	container.c \
-	vector.c
+	vec.c
 
 O = $(C:.c=.o)
 

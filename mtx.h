@@ -1,32 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   matrix.h                                           :+:      :+:    :+:   */
+/*   mtx.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/28 10:53:00 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/29 15:42:41 by vroche           ###   ########.fr       */
+/*   Updated: 2017/04/04 15:26:42 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MATRIX_H
-# define MATRIX_H
+#ifndef MTX_H
+# define MTX_H
 
 # include "math.h"
-# include "vector.h"
+# include "vec.h"
 # include "libft.h"
+# include <stdio.h>
 
-#include <stdio.h>
+typedef struct		s_mtx
+{
+	float			m[16];
+}					t_mtx;
 
-void	mtx_delete_44(float *mtx);
-float	*mtx_make_44(float v);
-void	mtx_dot(float *v, float *w, float *r);
-float	*mtx_perspective(float fovy, float aspect, float zNear, float zFar);
-float	*mtx_lookat(t_vect eye, t_vect center, t_vect up);
-float	*mtx_translate(float *m, t_vect v);
-float	*mtx_rotate(float *m, float a, t_vect v);
+t_mtx	mtx_make_44(float v);
+t_mtx	mtx_dot(t_mtx v, t_mtx w);
+t_mtx	mtx_perspective(float fovy, float aspect, float zNear, float zFar);
+t_mtx	mtx_lookat(t_vec eye, t_vec center, t_vec up);
+t_mtx	mtx_translate(t_mtx m, t_vec v);
+t_mtx	mtx_rotate(t_mtx m, float a, t_vec v);
 
-void	mtx_print(float *r, char *str);
+void	mtx_print(t_mtx r, char *str);
 
 #endif

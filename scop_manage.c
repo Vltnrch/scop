@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:17:40 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/31 15:27:28 by vroche           ###   ########.fr       */
+/*   Updated: 2017/04/04 16:28:52 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,14 @@ int		scop_expose(t_scop *scop)
 {
 
 	// in the "MVP" uniform
-	glUniformMatrix4fv(scop->gl.m_id, 1, GL_FALSE, scop->gl.model);
-	glUniformMatrix4fv(scop->gl.v_id, 1, GL_FALSE, scop->gl.view);
-	glUniformMatrix4fv(scop->gl.p_id, 1, GL_FALSE, scop->gl.projection);
+	glUniformMatrix4fv(scop->gl.m_id, 1, GL_FALSE, scop->gl.model.m);
+	glUniformMatrix4fv(scop->gl.v_id, 1, GL_FALSE, scop->gl.view.m);
+	glUniformMatrix4fv(scop->gl.p_id, 1, GL_FALSE, scop->gl.projection.m);
+	// Bind our texture in Texture Unit 0
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, scop->gl.texture_id);
+	// Set our "myTextureSampler" sampler to user Texture Unit 0
+	glUniform1i(scop->gl.ts_id, 0);
 	// Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Use our shader
@@ -36,10 +41,19 @@ int		scop_expose(t_scop *scop)
 	);
 	// 2nd attribute buffer : colors
 	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, scop->gl.colorbuffer);
+	//glBindBuffer(GL_ARRAY_BUFFER, scop->gl.colorbuffer);
+	//glVertexAttribPointer(
+	//	1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
+	//	3,                                // size
+	//	GL_FLOAT,                         // type
+	//	GL_FALSE,                         // normalized?
+	//	0,                                // stride
+	//	(void*)0                          // array buffer offset
+	//);
+	glBindBuffer(GL_ARRAY_BUFFER, scop->gl.uvbuffer);
 	glVertexAttribPointer(
 		1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
-		3,                                // size
+		2,                                // size : U+V => 2
 		GL_FLOAT,                         // type
 		GL_FALSE,                         // normalized?
 		0,                                // stride
@@ -47,7 +61,7 @@ int		scop_expose(t_scop *scop)
 	);
 	// Draw the triangle !
 
-	glDrawArrays(GL_TRIANGLES, 0, scop->obj.vertices.w); // 12*3 indices starting at 0 -> 12 triangles
+	glDrawArrays(GL_TRIANGLES, 0, vector_size(&scop->obj.vertices));
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
@@ -86,18 +100,14 @@ void		scop_mouse_event(t_scop *scop)
 
 int			scop_loop(t_scop *scop)
 {
-	float	*result;
+	t_mtx	result;
 
 	scop_mouse_event(scop);
 	scop_key_event(scop);
 	result = mtx_make_44(1.0f);
-	free(scop->gl.model);
-	scop->gl.model = mtx_translate(result, vect_make(0.0f, 0.0f, 1.0f + scop->zoom));
-	free(result);
-	result = mtx_rotate(scop->gl.model, scop->phi, vect_make(1.0f, 0.0f, 0.0f));
-	free(scop->gl.model);
-	scop->gl.model = mtx_rotate(result, scop->theta, vect_make(0.0f, 1.0f, 0.0f));
-	free(result);
+	scop->gl.model = mtx_translate(result, vec_make(0.0f, 0.0f, 1.0f + scop->zoom));
+	result = mtx_rotate(scop->gl.model, scop->phi, vec_make(1.0f, 0.0f, 0.0f));
+	scop->gl.model = mtx_rotate(result, scop->theta, vec_make(0.0f, 1.0f, 0.0f));
 	scop_expose(scop);
 	return (0);
 }

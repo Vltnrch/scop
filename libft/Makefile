@@ -6,7 +6,7 @@
 #    By: vroche <vroche@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/06 17:32:05 by vroche            #+#    #+#              #
-#    Updated: 2016/11/01 12:33:42 by vroche           ###   ########.fr        #
+#    Updated: 2017/04/04 16:52:41 by vroche           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -105,7 +105,12 @@ CFPF = ft_printf/ft_ft.c \
 
 OFPF = $(CFPF:.c=.o)
 
-O = $(OLIB) $(OGNL) $(OFPF)
+CVECTOR = vector/vector.c \
+		vector/vector_tool.c
+
+OVECTOR = $(CVECTOR:.c=.o)
+
+O = $(OLIB) $(OGNL) $(OFPF) $(OVECTOR)
 
 $(NAME): $(O)
 	ar rc $(NAME) $(O)
@@ -123,6 +128,10 @@ ft_printf: $(OFPF) $(OLIB)
 
 gnl: $(OGNL) $(OLIB)
 	ar rc $(NAME) $(OGNL) $(OLIB)
+	ranlib $(NAME)
+
+vector: $(OVECTOR) $(OLIB)
+	ar rc $(NAME) $(OVECTOR) $(OLIB)
 	ranlib $(NAME)
 
 %.o:%.c

@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/29 17:41:29 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/31 19:55:31 by vroche           ###   ########.fr       */
+/*   Updated: 2017/04/04 16:28:01 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 typedef struct	s_lobj
 {
-	t_ctn		vertex_id;
-	t_ctn		uv_id;
-	t_ctn		normal_id;
-	t_ctn		temp_vertices;
-	t_ctn		temp_uvs;
-	t_ctn		normals;
+	t_vector	vertex_id;
+	t_vector	uv_id;
+	t_vector	normal_id;
+	t_vector	temp_vertices;
+	t_vector	temp_uvs;
+	t_vector	normals;
 }				t_lobj;
 
 /*static void	obj_print(t_ctn *temp_vertices)
@@ -44,11 +44,12 @@ static void	tidy_vertices(t_scop *scop, t_lobj *lobj)
 {
 	int i;
 
-	make_ctn_f(&scop->obj.vertices, 1);
-	make_ctn_f(&scop->obj.uvs, 1);
-	make_ctn_f(&scop->obj.normals, 1);
+	vector_make(&scop->obj.vertices, 1, sizeof(float));
+	vector_make(&scop->obj.uvs, 1, sizeof(float));
+	vector_make(&scop->obj.normals, 1, sizeof(float));
 	i = 0;
-	while (i < lobj->vertex_id.w)
+	int	size = vector_size(&lobj->vertex_id);
+	while (i < size)
 	{
 		// Get the attributes thanks to the index
 		//float *vertex = &((float *)lobj.temp_vertices.ctn)[((unsigned int *)lobj.vertex_id.ctn)[i]];
@@ -58,11 +59,13 @@ static void	tidy_vertices(t_scop *scop, t_lobj *lobj)
 		//lobj.temp_vertices[ face[i].a ].x,lobj.temp_vertices[ face[i].a ].y,vertex[ face[i].a ].z
 
 		// Put the attributes in buffers
-		int a = ((unsigned int *)(lobj->vertex_id.ctn))[i];
-		float	*b = ((float *)(lobj->temp_vertices.ctn)) + ((a - 1) * 3);
-		add_ctn_f(&scop->obj.vertices, b[0]);
-		add_ctn_f(&scop->obj.vertices, b[1]);
-		add_ctn_f(&scop->obj.vertices, b[2]);
+		//int a = ((unsigned int *)(lobj->vertex_id.ptr))[i];
+		//float	*b = ((float *)(lobj->temp_vertices.ptr)) + ((a - 1) * 3);
+		unsigned int	a = *(unsigned int *)vector_get(&lobj->vertex_id, i);
+		float			*b = (float *)vector_get(&lobj->temp_vertices, ((a - 1) * 3));
+		vector_set(&scop->obj.vertices, &b[0]);
+		vector_set(&scop->obj.vertices, &b[1]);
+		vector_set(&scop->obj.vertices, &b[2]);
 		//add_ctn(&scop->obj.uvs, uv[0]);
 		//add_ctn(&scop->obj.uvs, uv[1]);
 		//add_ctn(&scop->obj.normals, normal[0]);
@@ -73,27 +76,27 @@ static void	tidy_vertices(t_scop *scop, t_lobj *lobj)
 
 static void	load_vertices(t_lobj *lobj, char *line)
 {
-	t_vect v;
+	t_vec v;
 
 	if (*line == 't')
 	{
 		sscanf(line, " %f %f\n", &v.x, &v.y);
-		add_ctn_f(&lobj->temp_uvs, v.x);
-		add_ctn_f(&lobj->temp_uvs, v.y);
+		vector_set(&lobj->temp_uvs, &v.x);
+		vector_set(&lobj->temp_uvs, &v.y);
 	}
 	else if (*line == 'n')
 	{
 		sscanf((line + 1), " %f %f %f\n", &v.x, &v.y, &v.z);
-		add_ctn_f(&lobj->normals, v.x);
-		add_ctn_f(&lobj->normals, v.y);
-		add_ctn_f(&lobj->normals, v.z);
+		vector_set(&lobj->normals, &v.x);
+		vector_set(&lobj->normals, &v.y);
+		vector_set(&lobj->normals, &v.z);
 	}
 	else
 	{
 		sscanf(line, " %f %f %f\n", &v.x, &v.y, &v.z);
-		add_ctn_f(&lobj->temp_vertices, v.x);
-		add_ctn_f(&lobj->temp_vertices, v.y);
-		add_ctn_f(&lobj->temp_vertices, v.z);
+		vector_set(&lobj->temp_vertices, &v.x);
+		vector_set(&lobj->temp_vertices, &v.y);
+		vector_set(&lobj->temp_vertices, &v.z);
 	}
 }
 
@@ -101,14 +104,14 @@ static void	load_faces(t_lobj *lobj, char *line)
 {
 	unsigned int vertexIndex[4];
 	int matches = sscanf((line + 1), "%d %d %d %d\n", &vertexIndex[0], &vertexIndex[1], &vertexIndex[2], &vertexIndex[3]);
-	add_ctn(&lobj->vertex_id, vertexIndex[0]);
-	add_ctn(&lobj->vertex_id, vertexIndex[1]);
-	add_ctn(&lobj->vertex_id, vertexIndex[2]);
+	vector_set(&lobj->vertex_id, &vertexIndex[0]);
+	vector_set(&lobj->vertex_id, &vertexIndex[1]);
+	vector_set(&lobj->vertex_id, &vertexIndex[2]);
 	if (matches == 4)
 	{
-		add_ctn(&lobj->vertex_id, vertexIndex[0]);
-		add_ctn(&lobj->vertex_id, vertexIndex[2]);
-		add_ctn(&lobj->vertex_id, vertexIndex[3]);
+		vector_set(&lobj->vertex_id, &vertexIndex[0]);
+		vector_set(&lobj->vertex_id, &vertexIndex[2]);
+		vector_set(&lobj->vertex_id, &vertexIndex[3]);
 	}
 }
 
@@ -118,12 +121,12 @@ void loadOBJ(char *path, t_scop *scop)
 	int 	fd;
 	char	*line;
 
-	make_ctn(&lobj.vertex_id, 1);
-	make_ctn(&lobj.uv_id, 1);
-	make_ctn(&lobj.normal_id, 1);
-	make_ctn_f(&lobj.temp_vertices, 1);
-	make_ctn_f(&lobj.temp_uvs, 1);
-	make_ctn_f(&lobj.normals, 1);
+	vector_make(&lobj.vertex_id, 1, sizeof(unsigned int));
+	vector_make(&lobj.uv_id, 1, sizeof(unsigned int));
+	vector_make(&lobj.normal_id, 1, sizeof(unsigned int));
+	vector_make(&lobj.temp_vertices, 1, sizeof(float));
+	vector_make(&lobj.temp_uvs, 1, sizeof(float));
+	vector_make(&lobj.normals, 1, sizeof(float));
 	if (!(fd = open(path, O_RDONLY)))
 		ft_perror_exit("open .obj");
 	while (get_next_line(fd, &line) > 0)

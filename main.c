@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:09:46 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/31 20:07:08 by vroche           ###   ########.fr       */
+/*   Updated: 2017/04/04 12:37:40 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	main(int ac, char **av)
 	scop.gl.m_id = glGetUniformLocation(scop.gl.program_id, "M");
 	scop.gl.v_id = glGetUniformLocation(scop.gl.program_id, "V");
 	scop.gl.p_id = glGetUniformLocation(scop.gl.program_id, "P");
+	scop.gl.ts_id = glGetUniformLocation(scop.gl.program_id, "TextureSampler");
 	mlx_expose_hook(scop.win, &scop_expose, &scop);
 	mlx_hook(scop.win, 2, 0, &scop_key_press, &scop);
 	mlx_hook(scop.win, 3, 0, &scop_key_release, &scop);

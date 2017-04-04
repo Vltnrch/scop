@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector.c                                           :+:      :+:    :+:   */
+/*   vec.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 16:12:16 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/28 10:53:31 by vroche           ###   ########.fr       */
+/*   Updated: 2017/04/04 14:51:54 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vector.h"
+#include "vec.h"
 
-t_vect	vect_make(float x, float y, float z)
+t_vec	vec_make(float x, float y, float z)
 {
-	t_vect	result;
+	t_vec	result;
 
 	result.x = x;
 	result.y = y;
@@ -23,39 +23,39 @@ t_vect	vect_make(float x, float y, float z)
 	return (result);
 }
 //param v must be v[x y z]
-float	vect_lenght(t_vect v)
+float	vec_lenght(t_vec v)
 {
 	return (sqrt(v.x * v.x + v.y * v.y + v.z * v.z));
 }
 
 //param v must be v[x y z]
-t_vect	vect_normalize(t_vect v)
+t_vec	vec_normalize(t_vec v)
 {
-	float len = vect_lenght(v);
+	float len = vec_lenght(v);
 
-	return (vect_make(v.x / len, v.y / len, v.z / len));
+	return (vec_make(v.x / len, v.y / len, v.z / len));
 }
 
 //param v and w must be v[x y z]
-t_vect	vect_cross(t_vect v, t_vect w)
+t_vec	vec_cross(t_vec v, t_vec w)
 {
-	return (vect_make(v.y * w.z - v.z * w.y, v.z * w.x - v.x * w.z, v.x * w.y - v.y * w.x));
+	return (vec_make(v.y * w.z - v.z * w.y, v.z * w.x - v.x * w.z, v.x * w.y - v.y * w.x));
 }
 
 //param v and w must be v[x y z]
-t_vect	vect_sub(t_vect v, t_vect w)
+t_vec	vec_sub(t_vec v, t_vec w)
 {
-	return (vect_make(v.x - w.x, v.y - w.y, v.z - w.z));
+	return (vec_make(v.x - w.x, v.y - w.y, v.z - w.z));
 }
 
 //param v and w must be v[x y z]
-t_vect	vect_add(t_vect v, t_vect w)
+t_vec	vec_add(t_vec v, t_vec w)
 {
-	return (vect_make(v.x + w.x, v.y + w.y, v.z + w.z));
+	return (vec_make(v.x + w.x, v.y + w.y, v.z + w.z));
 }
 
 //param v and w must be v[x y z]
-float		vect_dot(t_vect v, t_vect w)
+float		vec_dot(t_vec v, t_vec w)
 {
 	return (v.x * w.x + v.y * w.y + v.z * w.z);
 }
