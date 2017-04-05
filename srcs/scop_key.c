@@ -1,41 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scop_mouse.c                                       :+:      :+:    :+:   */
+/*   scop_key.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/28 14:21:31 by vroche            #+#    #+#             */
-/*   Updated: 2017/03/29 12:15:30 by vroche           ###   ########.fr       */
+/*   Created: 2017/03/28 14:20:53 by vroche            #+#    #+#             */
+/*   Updated: 2017/04/05 15:54:53 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
 
-int			scop_mouse_release(int keycode, int x, int y, t_scop *scop)
+int			scop_key_release(int keycode, t_scop *scop)
 {
-	scop->mk.x = x;
-	scop->mk.y = y;
-	scop->mk.mouse[keycode] = 0;
+	scop->mk.key[keycode] = 0;
 	return (0);
 }
 
-int			scop_mouse_press(int keycode, int x, int y, t_scop *scop)
+int			scop_key_press(int keycode, t_scop *scop)
 {
-	scop->mk.x = x;
-	scop->mk.y = y;
-	scop->mk.mouse[keycode] = 1;
-	return (0);
-}
-
-int		scop_mouse_motion(int x, int y, t_scop *scop)
-{
-	scop->mk.x = x;
-	scop->mk.y = y;
-	if (!scop->mk.mouse[MOUSE_L])
-	{
-		scop->mk.xprev = x;
-		scop->mk.yprev = y;
-	}
+	//printf("KEYCODE %d\n", keycode);
+	if (scop->mk.key[keycode] == 0)
+		scop->mk.key[keycode] = 1;
 	return (0);
 }

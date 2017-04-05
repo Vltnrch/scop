@@ -6,21 +6,11 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/29 17:41:29 by vroche            #+#    #+#             */
-/*   Updated: 2017/04/04 16:28:01 by vroche           ###   ########.fr       */
+/*   Updated: 2017/04/05 12:28:52 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
-
-typedef struct	s_lobj
-{
-	t_vector	vertex_id;
-	t_vector	uv_id;
-	t_vector	normal_id;
-	t_vector	temp_vertices;
-	t_vector	temp_uvs;
-	t_vector	normals;
-}				t_lobj;
 
 /*static void	obj_print(t_ctn *temp_vertices)
 {
@@ -115,7 +105,7 @@ static void	load_faces(t_lobj *lobj, char *line)
 	}
 }
 
-void loadOBJ(char *path, t_scop *scop)
+void load_obj(t_scop *scop, char *path)
 {
 	t_lobj	lobj;
 	int 	fd;

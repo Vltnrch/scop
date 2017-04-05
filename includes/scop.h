@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:10:10 by vroche            #+#    #+#             */
-/*   Updated: 2017/04/04 15:41:20 by vroche           ###   ########.fr       */
+/*   Updated: 2017/04/05 16:43:35 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
 # define KEY_ESCAPE 53
+# define KEY_T 17
 
 # define MOUSE_L 1
 # define MOUSE_R 2
@@ -53,17 +54,15 @@ static const GLfloat g_color_buffer_data[] = {
 typedef struct		s_gl
 {
 	GLuint			program_id;
+	GLuint			program_t_id;
 	GLuint			texture_id;
 	t_mtx			projection;
 	t_mtx			view;
 	t_mtx			model;
-	GLuint			m_id;
-	GLuint			v_id;
-	GLuint			p_id;
-	GLuint			ts_id;
 	GLuint			vertexbuffer;
 	GLuint			colorbuffer;
 	GLuint			uvbuffer;
+	GLuint			normalbuffer;
 }					t_gl;
 
 typedef struct		s_mk
@@ -93,9 +92,19 @@ typedef struct		s_scop
 	float			theta;
 	float			phi;
 	float			zoom;
+	int				is_textured;
 }					t_scop;
 
-int					scop_expose(t_scop *scop);
+typedef struct		s_lobj
+{
+	t_vector		vertex_id;
+	t_vector		uv_id;
+	t_vector		normal_id;
+	t_vector		temp_vertices;
+	t_vector		temp_uvs;
+	t_vector		normals;
+}					t_lobj;
+
 void				ft_perror_exit(const char *str);
 
 int					scop_loop(t_scop *scop);
@@ -107,9 +116,17 @@ int					scop_mouse_release(int keycode, int x, int y, t_scop *scop);
 int					scop_mouse_press(int keycode, int x, int y, t_scop *scop);
 int					scop_mouse_motion(int x, int y, t_scop *scop);
 
-void				scop_init(t_scop *scop);
-void 				loadOBJ(char *path, t_scop * scop);
+void				scop_init(t_scop *scop, char **av);
+
+void 				load_obj(t_scop * scop, char *path);
+
+void 				load_bmp(t_scop *scop, char *file);
 
 void				load_shaders(t_scop *scop);
+
+void				scop_center_obj(t_scop *scop);
+char				*scop_gen_color(t_scop *scop);
+void				scop_gen_uvs(t_scop *scop);
+void				scop_gen_normals(t_scop *scop);
 
 #endif
