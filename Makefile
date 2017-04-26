@@ -6,7 +6,7 @@
 #    By: vroche <vroche@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/03/16 10:49:38 by vroche            #+#    #+#              #
-#    Updated: 2017/04/05 12:42:46 by vroche           ###   ########.fr        #
+#    Updated: 2017/04/20 14:36:17 by vroche           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ C = srcs/main.c \
 	srcs/scop_manage.c \
 	srcs/scop_mouse.c \
 	srcs/scop_obj.c \
-	srcs/loaders/load_bmp.c \
+	srcs/loaders/load_texture.c \
 	srcs/loaders/load_obj.c \
 	srcs/loaders/load_shaders.c \
 	srcs/math/mtx.c \

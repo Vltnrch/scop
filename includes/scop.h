@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:10:10 by vroche            #+#    #+#             */
-/*   Updated: 2017/04/05 16:43:35 by vroche           ###   ########.fr       */
+/*   Updated: 2017/04/20 15:06:30 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ typedef struct		s_scop
 	t_obj			obj;
 	float			theta;
 	float			phi;
-	float			zoom;
+	t_vec			pos;
 	int				is_textured;
 }					t_scop;
 
@@ -102,7 +102,7 @@ typedef struct		s_lobj
 	t_vector		normal_id;
 	t_vector		temp_vertices;
 	t_vector		temp_uvs;
-	t_vector		normals;
+	t_vector		temp_normals;
 }					t_lobj;
 
 void				ft_perror_exit(const char *str);
@@ -120,7 +120,7 @@ void				scop_init(t_scop *scop, char **av);
 
 void 				load_obj(t_scop * scop, char *path);
 
-void 				load_bmp(t_scop *scop, char *file);
+void 				load_texture(t_scop *scop, char *file);
 
 void				load_shaders(t_scop *scop);
 

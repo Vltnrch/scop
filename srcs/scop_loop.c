@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 12:41:08 by vroche            #+#    #+#             */
-/*   Updated: 2017/04/05 17:09:06 by vroche           ###   ########.fr       */
+/*   Updated: 2017/04/20 17:08:22 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int		scop_draw(t_scop *scop)
 		glUniformMatrix4fv(glGetUniformLocation(scop->gl.program_t_id, "V"), 1, GL_FALSE, scop->gl.view.m);
 		glUniformMatrix4fv(glGetUniformLocation(scop->gl.program_t_id, "P"), 1, GL_FALSE, scop->gl.projection.m);
 		glUniform1i(glGetUniformLocation(scop->gl.program_t_id, "TextureSampler"), 0);
-		glUniform3f(glGetUniformLocation(scop->gl.program_t_id, "LightPosition_worldspace"), 2.0, 2.0, 20.0);
+		glUniform3f(glGetUniformLocation(scop->gl.program_t_id, "LightPosition_worldspace"), 3000.0, 3000.0, 3000.0);
 		// TEXTURES
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, scop->gl.texture_id);
@@ -45,7 +45,7 @@ static int		scop_draw(t_scop *scop)
 		glUniformMatrix4fv(glGetUniformLocation(scop->gl.program_id, "M"), 1, GL_FALSE, scop->gl.model.m);
 		glUniformMatrix4fv(glGetUniformLocation(scop->gl.program_id, "V"), 1, GL_FALSE, scop->gl.view.m);
 		glUniformMatrix4fv(glGetUniformLocation(scop->gl.program_id, "P"), 1, GL_FALSE, scop->gl.projection.m);
-		glUniform3f(glGetUniformLocation(scop->gl.program_id, "LightPosition_worldspace"), 2.0, 2.0, 20.0);
+		glUniform3f(glGetUniformLocation(scop->gl.program_id, "LightPosition_worldspace"), 3000.0, 3000.0, 3000.0);
 		// COLORS
 		glEnableVertexAttribArray(1);
 		glBindBuffer(GL_ARRAY_BUFFER, scop->gl.colorbuffer);
@@ -65,13 +65,23 @@ static int		scop_draw(t_scop *scop)
 
 static void		scop_key_event(t_scop *scop)
 {
+	static float keySpeed = 0.1f;
+
 	if (scop->mk.key[KEY_ESCAPE])
 		exit(0);
-	else if (scop->mk.key[KEY_T] == 1)
+	if (scop->mk.key[KEY_T] == 1)
 	{
 		scop->is_textured = !scop->is_textured ? 1 : 0;
 		scop->mk.key[KEY_T] = 2;
 	}
+	if (scop->mk.key[KEY_UP] == 1)
+		scop->pos.y -= keySpeed;
+	if (scop->mk.key[KEY_DOWN] == 1)
+		scop->pos.y += keySpeed;
+	if (scop->mk.key[KEY_LEFT] == 1)
+		scop->pos.x += keySpeed;
+	if (scop->mk.key[KEY_RIGHT] == 1)
+		scop->pos.x -= keySpeed;
 }
 
 static void		scop_mouse_event(t_scop *scop)
@@ -90,23 +100,23 @@ static void		scop_mouse_event(t_scop *scop)
 	if (scop->phi < -M_PI / 2)
 		scop->phi = -M_PI / 2;
 	if (scop->mk.mouse[MOUSE_SD])
-		scop->zoom -= mouseSpeed * 5;
+		scop->pos.z -= mouseSpeed * 5;
 	else if (scop->mk.mouse[MOUSE_SU])
-		scop->zoom += mouseSpeed * 5;
+		scop->pos.z += mouseSpeed * 5;
 	scop->mk.mouse[MOUSE_SD] = 0;
 	scop->mk.mouse[MOUSE_SU] = 0;
 }
 
 int			scop_loop(t_scop *scop)
 {
-	t_mtx	result;
-
 	scop_mouse_event(scop);
 	scop_key_event(scop);
-	result = mtx_make_44(1.0f);
-	scop->gl.model = mtx_translate(result, vec_make(0.0f, 0.0f, 1.0f + scop->zoom));
-	result = mtx_rotate(scop->gl.model, scop->phi, vec_make(1.0f, 0.0f, 0.0f));
-	scop->gl.model = mtx_rotate(result, scop->theta, vec_make(0.0f, 1.0f, 0.0f));
+	scop->gl.model = 
+	mtx_rotate(
+		mtx_rotate(
+			mtx_translate(mtx_make_44(1.0f), scop->pos), 
+		scop->phi, vec_make(1.0f, 0.0f, 0.0f)), 
+	scop->theta, vec_make(0.0f, 1.0f, 0.0f));
 	scop_draw(scop);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/30 17:04:32 by vroche            #+#    #+#             */
-/*   Updated: 2017/04/05 16:43:48 by vroche           ###   ########.fr       */
+/*   Updated: 2017/04/20 16:57:35 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	scop_init_struct(t_scop *scop)
 	scop->mk.yprev = 0;
 	scop->theta = 0.0f;
 	scop->phi = 0.0f;
-	scop->zoom = 0.0f;
+	scop->pos = vec_make(0.0f, 0.0f, 1.0f);
 	scop->is_textured = 0;
 	scop->gl.projection = mtx_perspective(45.0f, WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 	scop->gl.model = mtx_make_44(1.0f);
@@ -66,10 +66,12 @@ void		scop_init(t_scop *scop, char **av)
 	scop_init_mlx(scop);
 	scop_init_gl(scop);
 	if (av[2])
-		load_bmp(scop, av[2]);
+		load_texture(scop, av[2]);
 	scop_center_obj(scop);
-	scop_gen_uvs(scop);
-	scop_gen_normals(scop);
+	if (!vector_size(&scop->obj.uvs))
+		scop_gen_uvs(scop);
+	if (!vector_size(&scop->obj.normals))
+		scop_gen_normals(scop);
 	color = scop_gen_color(scop);
 	// Load it into a VBO
 	glGenBuffers(1, &scop->gl.vertexbuffer);

@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/29 17:41:29 by vroche            #+#    #+#             */
-/*   Updated: 2017/04/05 12:28:52 by vroche           ###   ########.fr       */
+/*   Updated: 2017/04/20 17:05:44 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,32 +34,39 @@ static void	tidy_vertices(t_scop *scop, t_lobj *lobj)
 {
 	int i;
 
-	vector_make(&scop->obj.vertices, 1, sizeof(float));
-	vector_make(&scop->obj.uvs, 1, sizeof(float));
-	vector_make(&scop->obj.normals, 1, sizeof(float));
+	vector_make(&scop->obj.vertices, 1024, sizeof(float));
+	vector_make(&scop->obj.uvs, 1024, sizeof(float));
+	vector_make(&scop->obj.normals, 1024, sizeof(float));
 	i = 0;
 	int	size = vector_size(&lobj->vertex_id);
 	while (i < size)
 	{
-		// Get the attributes thanks to the index
-		//float *vertex = &((float *)lobj.temp_vertices.ctn)[((unsigned int *)lobj.vertex_id.ctn)[i]];
-		//float *uv = &((float *)lobj.temp_uvs.ctn)[((unsigned int *)(lobj.uv_id.ctn))[i] * 3 - 1];
-		//float *normal = &((float *)lobj.normals.ctn)[((unsigned int *)(lobj.normal_id.ctn))[i] * 3 - 1];
-
-		//lobj.temp_vertices[ face[i].a ].x,lobj.temp_vertices[ face[i].a ].y,vertex[ face[i].a ].z
-
-		// Put the attributes in buffers
-		//int a = ((unsigned int *)(lobj->vertex_id.ptr))[i];
-		//float	*b = ((float *)(lobj->temp_vertices.ptr)) + ((a - 1) * 3);
 		unsigned int	a = *(unsigned int *)vector_get(&lobj->vertex_id, i);
 		float			*b = (float *)vector_get(&lobj->temp_vertices, ((a - 1) * 3));
 		vector_set(&scop->obj.vertices, &b[0]);
 		vector_set(&scop->obj.vertices, &b[1]);
 		vector_set(&scop->obj.vertices, &b[2]);
-		//add_ctn(&scop->obj.uvs, uv[0]);
-		//add_ctn(&scop->obj.uvs, uv[1]);
-		//add_ctn(&scop->obj.normals, normal[0]);
-		//add_ctn(&scop->obj.normals, normal[1]);
+		i++;
+	}
+	i = 0;
+	size = vector_size(&lobj->uv_id);
+	while (i < size)
+	{
+		unsigned int	a = *(unsigned int *)vector_get(&lobj->uv_id, i);
+		float			*b = (float *)vector_get(&lobj->temp_uvs, ((a - 1) * 2));
+		vector_set(&scop->obj.uvs, &b[0]);
+		vector_set(&scop->obj.uvs, &b[1]);
+		i++;
+	}
+	i = 0;
+	size = vector_size(&lobj->normal_id);
+	while (i < size)
+	{
+		unsigned int	a = *(unsigned int *)vector_get(&lobj->normal_id, i);
+		float			*b = (float *)vector_get(&lobj->temp_normals, ((a - 1) * 3));
+		vector_set(&scop->obj.normals, &b[0]);
+		vector_set(&scop->obj.normals, &b[1]);
+		vector_set(&scop->obj.normals, &b[2]);
 		i++;
 	}
 }
@@ -77,9 +84,9 @@ static void	load_vertices(t_lobj *lobj, char *line)
 	else if (*line == 'n')
 	{
 		sscanf((line + 1), " %f %f %f\n", &v.x, &v.y, &v.z);
-		vector_set(&lobj->normals, &v.x);
-		vector_set(&lobj->normals, &v.y);
-		vector_set(&lobj->normals, &v.z);
+		vector_set(&lobj->temp_normals, &v.x);
+		vector_set(&lobj->temp_normals, &v.y);
+		vector_set(&lobj->temp_normals, &v.z);
 	}
 	else
 	{
@@ -90,19 +97,83 @@ static void	load_vertices(t_lobj *lobj, char *line)
 	}
 }
 
-static void	load_faces(t_lobj *lobj, char *line)
+static void	load_v(t_lobj *lobj, char *line)
 {
 	unsigned int vertexIndex[4];
-	int matches = sscanf((line + 1), "%d %d %d %d\n", &vertexIndex[0], &vertexIndex[1], &vertexIndex[2], &vertexIndex[3]);
+	int	match;
+
+	match = sscanf((line + 1), "%d %d %d %d\n", &vertexIndex[0], &vertexIndex[1], &vertexIndex[2], &vertexIndex[3]);
 	vector_set(&lobj->vertex_id, &vertexIndex[0]);
 	vector_set(&lobj->vertex_id, &vertexIndex[1]);
 	vector_set(&lobj->vertex_id, &vertexIndex[2]);
-	if (matches == 4)
+	if (match == 4)
 	{
 		vector_set(&lobj->vertex_id, &vertexIndex[0]);
 		vector_set(&lobj->vertex_id, &vertexIndex[2]);
 		vector_set(&lobj->vertex_id, &vertexIndex[3]);
 	}
+}
+
+static void	load_vn(t_lobj *lobj, char *line)
+{
+	unsigned int vertexIndex[8];
+	int	match;
+
+	match = sscanf((line + 1), "%d//%d %d//%d %d//%d %d//%d\n", &vertexIndex[0], &vertexIndex[1], &vertexIndex[2], &vertexIndex[3], &vertexIndex[4], &vertexIndex[5], &vertexIndex[6], &vertexIndex[7]);
+	vector_set(&lobj->vertex_id, &vertexIndex[0]);
+	vector_set(&lobj->vertex_id, &vertexIndex[2]);
+	vector_set(&lobj->vertex_id, &vertexIndex[4]);
+	vector_set(&lobj->normal_id, &vertexIndex[1]);
+	vector_set(&lobj->normal_id, &vertexIndex[3]);
+	vector_set(&lobj->normal_id, &vertexIndex[5]);
+	if (match == 8)
+	{
+		vector_set(&lobj->vertex_id, &vertexIndex[0]);
+		vector_set(&lobj->vertex_id, &vertexIndex[4]);
+		vector_set(&lobj->vertex_id, &vertexIndex[6]);
+		vector_set(&lobj->normal_id, &vertexIndex[1]);
+		vector_set(&lobj->normal_id, &vertexIndex[5]);
+		vector_set(&lobj->normal_id, &vertexIndex[7]);
+	}
+}
+
+static void	load_vun(t_lobj *lobj, char *line)
+{
+	unsigned int vertexIndex[12];
+	int	match;
+
+	match = sscanf((line + 1), "%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &vertexIndex[1], &vertexIndex[2], &vertexIndex[3], &vertexIndex[4], &vertexIndex[5], &vertexIndex[6], &vertexIndex[7], &vertexIndex[8], &vertexIndex[9], &vertexIndex[10], &vertexIndex[11]);
+	vector_set(&lobj->vertex_id, &vertexIndex[0]);
+	vector_set(&lobj->vertex_id, &vertexIndex[3]);
+	vector_set(&lobj->vertex_id, &vertexIndex[6]);
+	vector_set(&lobj->uv_id, &vertexIndex[1]);
+	vector_set(&lobj->uv_id, &vertexIndex[4]);
+	vector_set(&lobj->uv_id, &vertexIndex[7]);
+	vector_set(&lobj->normal_id, &vertexIndex[2]);
+	vector_set(&lobj->normal_id, &vertexIndex[5]);
+	vector_set(&lobj->normal_id, &vertexIndex[8]);
+	if (match == 12)
+	{
+		vector_set(&lobj->vertex_id, &vertexIndex[0]);
+		vector_set(&lobj->vertex_id, &vertexIndex[6]);
+		vector_set(&lobj->vertex_id, &vertexIndex[9]);
+		vector_set(&lobj->uv_id, &vertexIndex[1]);
+		vector_set(&lobj->uv_id, &vertexIndex[7]);
+		vector_set(&lobj->uv_id, &vertexIndex[10]);
+		vector_set(&lobj->normal_id, &vertexIndex[0]);
+		vector_set(&lobj->normal_id, &vertexIndex[8]);
+		vector_set(&lobj->normal_id, &vertexIndex[11]);
+	}
+}
+
+static void	load_faces(t_lobj *lobj, char *line)
+{
+	if (strstr(line, "//"))
+		load_vn(lobj, line);
+	else if (strstr(line, "/"))
+		load_vun(lobj, line);
+	else
+		load_v(lobj, line);
 }
 
 void load_obj(t_scop *scop, char *path)
@@ -111,12 +182,12 @@ void load_obj(t_scop *scop, char *path)
 	int 	fd;
 	char	*line;
 
-	vector_make(&lobj.vertex_id, 1, sizeof(unsigned int));
-	vector_make(&lobj.uv_id, 1, sizeof(unsigned int));
-	vector_make(&lobj.normal_id, 1, sizeof(unsigned int));
-	vector_make(&lobj.temp_vertices, 1, sizeof(float));
-	vector_make(&lobj.temp_uvs, 1, sizeof(float));
-	vector_make(&lobj.normals, 1, sizeof(float));
+	vector_make(&lobj.vertex_id, 1024, sizeof(unsigned int));
+	vector_make(&lobj.uv_id, 1024, sizeof(unsigned int));
+	vector_make(&lobj.normal_id, 1024, sizeof(unsigned int));
+	vector_make(&lobj.temp_vertices, 1024, sizeof(float));
+	vector_make(&lobj.temp_uvs, 1024, sizeof(float));
+	vector_make(&lobj.temp_normals, 1024, sizeof(float));
 	if (!(fd = open(path, O_RDONLY)))
 		ft_perror_exit("open .obj");
 	while (get_next_line(fd, &line) > 0)

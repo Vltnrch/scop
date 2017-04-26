@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 12:30:50 by vroche            #+#    #+#             */
-/*   Updated: 2017/04/05 17:02:09 by vroche           ###   ########.fr       */
+/*   Updated: 2017/04/20 14:28:20 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,10 @@ void		scop_gen_normals(t_scop *scop)
 	while (i < size)
 	{
 		p = (float *)vector_get(&scop->obj.vertices, i);
-		t_vec vec1 = vec_sub(vec_make(p[0], p[1], p[2]), vec_make(p[3], p[4], p[5]));
-		t_vec vec2 = vec_sub(vec_make(p[3], p[4], p[5]), vec_make(p[6], p[7], p[8]));
+		//t_vec vec1 = vec_sub(vec_make(p[0], p[1], p[2]), vec_make(p[3], p[4], p[5]));
+		//t_vec vec2 = vec_sub(vec_make(p[3], p[4], p[5]), vec_make(p[6], p[7], p[8]));
+		t_vec vec1 = vec_sub(vec_make(p[3], p[4], p[5]), vec_make(p[0], p[1], p[2]));
+		t_vec vec2 = vec_sub(vec_make(p[6], p[7], p[8]), vec_make(p[0], p[1], p[2]));
 		t_vec vec = vec_normalize(vec_cross(vec1, vec2));
 		vector_set(&scop->obj.normals, &vec.x);
 		vector_set(&scop->obj.normals, &vec.y);
