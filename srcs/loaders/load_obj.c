@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/29 17:41:29 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/03 18:13:09 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/03 22:07:42 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ static void	tidy_vertices(t_scop *scop, t_lobj *lobj)
 	tidy_vertices_part(&lobj->vertex_id, &lobj->temp_vertices, &scop->obj.vertices, 3);
 	tidy_vertices_part(&lobj->uv_id, &lobj->temp_uvs, &scop->obj.uvs, 2);
 	tidy_vertices_part(&lobj->normal_id, &lobj->temp_normals, &scop->obj.normals, 3);
+	vector_delete(&lobj->vertex_id);
+	vector_delete(&lobj->uv_id);
+	vector_delete(&lobj->normal_id);
+	vector_delete(&lobj->temp_vertices);
+	vector_delete(&lobj->temp_uvs);
+	vector_delete(&lobj->temp_normals);
 }
 
 static void	load_vertices(t_lobj *lobj, char **cut)
