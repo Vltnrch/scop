@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/03 12:20:59 by vroche            #+#    #+#             */
-/*   Updated: 2015/10/18 13:58:20 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/03 15:59:54 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,7 @@ char				*ft_lltoa(long long n);
 char				*ft_lltouab(long long n, unsigned int base);
 
 int					ft_isspace(int c);
+char				**ft_strsplit_space(const char *s);
+void				ft_freetab(char **tab);
 
 #endif

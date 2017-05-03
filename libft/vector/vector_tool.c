@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/04 16:48:53 by vroche            #+#    #+#             */
-/*   Updated: 2017/04/04 16:49:03 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/03 16:55:29 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	vector_set(t_vector *v, void *set)
 
 void	*vector_get(t_vector *v, int i)
 {
+	if (i >= v->max)
+		return (NULL);
 	return ((char *)v->ptr + (i * v->type));
 }
 

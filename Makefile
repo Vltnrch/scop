@@ -6,7 +6,7 @@
 #    By: vroche <vroche@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/03/16 10:49:38 by vroche            #+#    #+#              #
-#    Updated: 2017/04/20 14:36:17 by vroche           ###   ########.fr        #
+#    Updated: 2017/05/03 18:00:59 by vroche           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ C = srcs/main.c \
 	srcs/scop_obj.c \
 	srcs/loaders/load_texture.c \
 	srcs/loaders/load_obj.c \
+	srcs/loaders/load_obj_v.c \
 	srcs/loaders/load_shaders.c \
 	srcs/math/mtx.c \
 	srcs/math/mtx_tool.c \

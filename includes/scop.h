@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:10:10 by vroche            #+#    #+#             */
-/*   Updated: 2017/04/20 15:06:30 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/03 18:00:42 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,10 @@ int					scop_mouse_motion(int x, int y, t_scop *scop);
 void				scop_init(t_scop *scop, char **av);
 
 void 				load_obj(t_scop * scop, char *path);
+
+void				load_v(t_lobj *lobj, char **cut);
+void				load_vn(t_lobj *lobj, char **cut);
+void				load_vun(t_lobj *lobj, char **cut);
 
 void 				load_texture(t_scop *scop, char *file);
 

@@ -6,7 +6,7 @@
 #    By: vroche <vroche@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/06 17:32:05 by vroche            #+#    #+#              #
-#    Updated: 2017/04/04 16:52:41 by vroche           ###   ########.fr        #
+#    Updated: 2017/05/03 16:01:03 by vroche           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ CLIB = is/ft_isalnum.c \
 	lst/ft_lstmap.c \
 	lst/ft_lstnew.c \
 	mem/ft_bzero.c \
+	mem/ft_freetab.c \
 	mem/ft_memalloc.c \
 	mem/ft_memccpy.c \
 	mem/ft_memchr.c \
@@ -71,6 +72,7 @@ CLIB = is/ft_isalnum.c \
 	str/ft_strnew.c \
 	str/ft_strnstr.c \
 	str/ft_strrchr.c \
+	str/ft_strsplit_space.c \
 	str/ft_strsplit.c \
 	str/ft_strstr.c \
 	str/ft_strsub.c \
