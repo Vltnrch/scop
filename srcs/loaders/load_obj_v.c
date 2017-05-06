@@ -6,13 +6,13 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/03 17:58:54 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/03 17:59:20 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/06 15:29:10 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
 
-void	load_v(t_lobj *lobj, char **cut)
+void		load_v(t_lobj *lobj, char **cut)
 {
 	int		count;
 	int		convert[4];

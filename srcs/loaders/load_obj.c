@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/29 17:41:29 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/03 22:07:42 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/06 15:29:17 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static void	load_faces(t_lobj *lobj, char **cut, char *line)
 		load_v(lobj, cut);
 }
 
-void load_obj(t_scop *scop, char *path)
+void		load_obj(t_scop *scop, char *path)
 {
 	t_lobj	lobj;
 	int 	fd;

@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/24 13:10:55 by vroche            #+#    #+#             */
-/*   Updated: 2017/04/05 12:22:06 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/06 14:21:22 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,14 @@ t_mtx mtx_dot(t_mtx v, t_mtx w)
 	i = 0;
 	while (i < 16)
 	{
-		r.m[i] = v.m[(i / 4) * 4] * w.m[i % 4] + v.m[(i / 4) * 4 + 1] * w.m[(i % 4) + 4] + v.m[(i / 4) * 4 + 2] * w.m[(i % 4) + 8] + v.m[(i / 4) * 4 + 3] * w.m[(i % 4) + 12];
+		r.m[i] = v.m[(i / 4) * 4] * w.m[i % 4] + \
+			v.m[(i / 4) * 4 + 1] * w.m[(i % 4) + 4] + \
+			v.m[(i / 4) * 4 + 2] * w.m[(i % 4) + 8] + \
+			v.m[(i / 4) * 4 + 3] * w.m[(i % 4) + 12];
 		i++;
 	}
 	return (r);
 }
-
-/*ATTENTION PRINT*/
 
 void	mtx_print(t_mtx r, char *str)
 {
@@ -64,5 +65,3 @@ void	mtx_print(t_mtx r, char *str)
 	}
 	printf("---------------\n");
 }
-
-/*!!!!!!!!!!!!!!!*/

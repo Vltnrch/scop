@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 12:22:13 by vroche            #+#    #+#             */
-/*   Updated: 2017/04/05 12:22:26 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/06 14:31:16 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,11 @@ t_mtx	mtx_perspective(float fovy, float aspect, float zNear, float zFar)
 
 	result = mtx_make_44(0.0f);
 	tanHalfFovy = tan(fovy / (float)2);
-	result.m[0] = 1 / (aspect * tanHalfFovy);	//[0][0]
-	result.m[5] = 1 / (tanHalfFovy);	//[1][1]
-	result.m[11] = -1; //[2][3]
-	result.m[10] = zFar / (zNear - zFar);	//[2][2]
-	result.m[14] = -(zFar * zNear) / (zFar - zNear);	//[3][2]
-	//result[2][2] = - (zFar + zNear) / (zFar - zNear);
-	//result[3][2] = - (2 * zFar * zNear) / (zFar - zNear);
+	result.m[0] = 1 / (aspect * tanHalfFovy);
+	result.m[5] = 1 / (tanHalfFovy);
+	result.m[11] = -1;
+	result.m[10] = zFar / (zNear - zFar);
+	result.m[14] = -(zFar * zNear) / (zFar - zNear);
 	return (result);
 }
 
@@ -38,18 +36,18 @@ t_mtx	mtx_lookat(t_vec eye, t_vec center, t_vec up)
 	t_mtx	result;
 
 	result = mtx_make_44(1.0f);
-	result.m[0] = s.x;	//[0][0]
-	result.m[4] = s.y;	//[1][0]
-	result.m[8] = s.z;	//[2][0]
-	result.m[1] = u.x;	//[0][1]
-	result.m[5] = u.y;	//[1][1]
-	result.m[9] = u.z;	//[2][1]
-	result.m[2] = -f.x;	//[0][2]
-	result.m[6] = -f.y;	//[1][2]
-	result.m[10] = -f.z;	//[2][2]
-	result.m[12] = -vec_dot(s, eye);	//[3][0]
-	result.m[13] = -vec_dot(u, eye);	//[3][1]
-	result.m[14] = vec_dot(f, eye);	//[3][2]
+	result.m[0] = s.x;
+	result.m[4] = s.y;
+	result.m[8] = s.z;
+	result.m[1] = u.x;
+	result.m[5] = u.y;
+	result.m[9] = u.z;
+	result.m[2] = -f.x;
+	result.m[6] = -f.y;
+	result.m[10] = -f.z;
+	result.m[12] = -vec_dot(s, eye);
+	result.m[13] = -vec_dot(u, eye);
+	result.m[14] = vec_dot(f, eye);
 	return (result);
 }
 
@@ -72,15 +70,44 @@ t_mtx	mtx_translate(t_mtx m, t_vec v)
 	return result;
 }
 
+t_mtx	mtx_rotate_result(t_mtx m, t_mtx r)
+{
+	t_mtx result;
+
+	result = mtx_make_44(0.0f);
+	result.m[0] = m.m[0] * r.m[0] + m.m[4] * r.m[1] + m.m[8] * r.m[2];
+	result.m[1] = m.m[1] * r.m[0] + m.m[5] * r.m[1] + m.m[9] * r.m[2];
+	result.m[2] = m.m[2] * r.m[0] + m.m[6] * r.m[1] + m.m[10] * r.m[2];
+	result.m[3] = m.m[3] * r.m[0] + m.m[7] * r.m[1] + m.m[11] * r.m[2];
+	result.m[4] = m.m[0] * r.m[4] + m.m[4] * r.m[5] + m.m[8] * r.m[6];
+	result.m[5] = m.m[1] * r.m[4] + m.m[5] * r.m[5] + m.m[9] * r.m[6];
+	result.m[6] = m.m[2] * r.m[4] + m.m[6] * r.m[5] + m.m[10] * r.m[6];
+	result.m[7] = m.m[3] * r.m[4] + m.m[7] * r.m[5] + m.m[11] * r.m[6];
+	result.m[8] = m.m[0] * r.m[8] + m.m[4] * r.m[9] + m.m[8] * r.m[10];
+	result.m[9] = m.m[1] * r.m[8] + m.m[5] * r.m[9] + m.m[9] * r.m[10];
+	result.m[10] = m.m[2] * r.m[8] + m.m[6] * r.m[9] + m.m[10] * r.m[10];
+	result.m[11] = m.m[3] * r.m[8] + m.m[7] * r.m[9] + m.m[11] * r.m[10];
+	result.m[12] = m.m[12];
+	result.m[13] = m.m[13];
+	result.m[14] = m.m[14];
+	result.m[15] = m.m[15];
+	return result;
+}
+
 t_mtx	mtx_rotate(t_mtx m, float a, t_vec v)
 {
-	float c = cos(a);
-	float s = sin(a);
+	float	c;
+	float	s;
+	t_vec	axis;
+	t_vec	temp;
+	t_mtx	rotate;
 
-	t_vec	axis = vec_normalize(v);
-	t_vec	temp = vec_make((1.0f - c) * axis.x, (1.0f - c) * axis.y, (1.0f - c) * axis.z);
-
-	t_mtx rotate = mtx_make_44(0.0f);
+	c = cos(a);
+	s = sin(a);
+	axis = vec_normalize(v);
+	temp = vec_make((1.0f - c) * axis.x, (1.0f - c) * axis.y, \
+					(1.0f - c) * axis.z);
+	rotate = mtx_make_44(0.0f);
 	rotate.m[0] = c + temp.x * axis.x;
 	rotate.m[1] = temp.x * axis.y + s * axis.z;
 	rotate.m[2] = temp.x * axis.z - s * axis.y;
@@ -90,22 +117,5 @@ t_mtx	mtx_rotate(t_mtx m, float a, t_vec v)
 	rotate.m[8] = temp.z * axis.x + s * axis.y;
 	rotate.m[9] = temp.z * axis.y - s * axis.x;
 	rotate.m[10] = c + temp.z * axis.z;
-	t_mtx result = mtx_make_44(0.0f);
-	result.m[0] = m.m[0] * rotate.m[0] + m.m[4] * rotate.m[1] + m.m[8] * rotate.m[2];
-	result.m[1] = m.m[1] * rotate.m[0] + m.m[5] * rotate.m[1] + m.m[9] * rotate.m[2];
-	result.m[2] = m.m[2] * rotate.m[0] + m.m[6] * rotate.m[1] + m.m[10] * rotate.m[2];
-	result.m[3] = m.m[3] * rotate.m[0] + m.m[7] * rotate.m[1] + m.m[11] * rotate.m[2];
-	result.m[4] = m.m[0] * rotate.m[4] + m.m[4] * rotate.m[5] + m.m[8] * rotate.m[6];
-	result.m[5] = m.m[1] * rotate.m[4] + m.m[5] * rotate.m[5] + m.m[9] * rotate.m[6];
-	result.m[6] = m.m[2] * rotate.m[4] + m.m[6] * rotate.m[5] + m.m[10] * rotate.m[6];
-	result.m[7] = m.m[3] * rotate.m[4] + m.m[7] * rotate.m[5] + m.m[11] * rotate.m[6];
-	result.m[8] = m.m[0] * rotate.m[8] + m.m[4] * rotate.m[9] + m.m[8] * rotate.m[10];
-	result.m[9] = m.m[1] * rotate.m[8] + m.m[5] * rotate.m[9] + m.m[9] * rotate.m[10];
-	result.m[10] = m.m[2] * rotate.m[8] + m.m[6] * rotate.m[9] + m.m[10] * rotate.m[10];
-	result.m[11] = m.m[3] * rotate.m[8] + m.m[7] * rotate.m[9] + m.m[11] * rotate.m[10];
-	result.m[12] = m.m[12];
-	result.m[13] = m.m[13];
-	result.m[14] = m.m[14];
-	result.m[15] = m.m[15];
-	return result;
+	return (mtx_rotate_result(m, rotate));
 }

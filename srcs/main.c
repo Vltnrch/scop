@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:09:46 by vroche            #+#    #+#             */
-/*   Updated: 2017/04/05 15:12:49 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/06 14:16:43 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,5 @@ int	main(int ac, char **av)
 	mlx_hook(scop.win, 6, 0, &scop_mouse_motion, &scop); 
 	mlx_loop_hook(scop.mlx, &scop_loop, &scop);
 	mlx_loop(scop.mlx);
-	// Cleanup VBO and shader
-	//glDeleteBuffers(1, &vertexbuffer);
-	//glDeleteBuffers(1, &colorbuffer);
-	//glDeleteProgram(scop->program_id);
-	//glDeleteVertexArrays(1, &VertexArrayID);
 	return (0);
 }

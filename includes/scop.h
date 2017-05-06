@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:10:10 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/03 18:00:42 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/06 17:17:44 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,18 @@
 # define MOUSE_SU 5
 
 static const GLfloat g_color_buffer_data[] = { 
-	68 /255.0f, 68/255.0f, 68/255.0f,
-	68 /255.0f, 68/255.0f, 68/255.0f,
-	68 /255.0f, 68/255.0f, 68/255.0f,
+	34/255.0f, 34/255.0f, 34/255.0f,
+	34/255.0f, 34/255.0f, 34/255.0f,
+	34/255.0f, 34/255.0f, 34/255.0f,
+	68/255.0f, 68/255.0f, 68/255.0f,
+	68/255.0f, 68/255.0f, 68/255.0f,
+	68/255.0f, 68/255.0f, 68/255.0f,
 	102/255.0f, 102/255.0f, 102/255.0f,
 	102/255.0f, 102/255.0f, 102/255.0f,
-	102/255.0f, 102/255.0f, 102/255.0f
+	102/255.0f, 102/255.0f, 102/255.0f,
+	136/255.0f, 136/255.0f, 136/255.0f,
+	136/255.0f, 136/255.0f, 136/255.0f,
+	136/255.0f, 136/255.0f, 136/255.0f
 };
 
 typedef struct		s_gl
@@ -105,32 +111,37 @@ typedef struct		s_lobj
 	t_vector		temp_normals;
 }					t_lobj;
 
-void				ft_perror_exit(const char *str);
+float				scop_center_obj(t_scop *scop);
 
-int					scop_loop(t_scop *scop);
+char				*scop_gen_color(t_scop *scop);
+void				scop_gen_uvs(t_scop *scop);
+void				scop_gen_normals(t_scop *scop);
+
+void				scop_init(t_scop *scop, char **av);
 
 int					scop_key_release(int keycode, t_scop *scop);
 int					scop_key_press(int keycode, t_scop *scop);
+void				scop_key_event(t_scop *scop);
+
+int					scop_loop(t_scop *scop);
+
+void				ft_perror_exit(const char *str);
 
 int					scop_mouse_release(int keycode, int x, int y, t_scop *scop);
 int					scop_mouse_press(int keycode, int x, int y, t_scop *scop);
 int					scop_mouse_motion(int x, int y, t_scop *scop);
+void				scop_mouse_event(t_scop *scop);
 
-void				scop_init(t_scop *scop, char **av);
-
-void 				load_obj(t_scop * scop, char *path);
+void				load_obj(t_scop *scop, char *path);
 
 void				load_v(t_lobj *lobj, char **cut);
 void				load_vn(t_lobj *lobj, char **cut);
 void				load_vun(t_lobj *lobj, char **cut);
 
-void 				load_texture(t_scop *scop, char *file);
-
 void				load_shaders(t_scop *scop);
 
-void				scop_center_obj(t_scop *scop);
-char				*scop_gen_color(t_scop *scop);
-void				scop_gen_uvs(t_scop *scop);
-void				scop_gen_normals(t_scop *scop);
+void				load_bmp(char *ptr);
+void				texture_gl(t_scop *scop);
+void				load_texture(t_scop *scop, char *file);
 
 #endif
