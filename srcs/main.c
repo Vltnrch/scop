@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:09:46 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/08 12:16:48 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/09 16:47:42 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int ac, char **av)
 
 	if (ac < 2 || ac > 3)
 	{
-		printf("usage: %s obj_file.obj [texture_file]\n", av[0]);
+		printf("usage: %s obj_file.obj [texture_file_24bits.bmp]\n", av[0]);
 		return (-1);
 	}
 	scop_init(&scop, av);
