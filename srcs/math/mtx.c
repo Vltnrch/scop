@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/24 13:10:55 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/06 14:21:22 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/08 12:17:00 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ t_mtx	mtx_make_44(float v)
 	return (result);
 }
 
-t_mtx mtx_dot(t_mtx v, t_mtx w)
+t_mtx	mtx_dot(t_mtx v, t_mtx w)
 {
-	int	i;
+	int		i;
 	t_mtx	r;
 
 	r = mtx_make_44(1.0f);

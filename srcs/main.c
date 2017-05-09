@@ -6,12 +6,11 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:09:46 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/06 14:16:43 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/08 12:16:48 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
-
 
 int	main(int ac, char **av)
 {
@@ -29,7 +28,7 @@ int	main(int ac, char **av)
 	mlx_hook(scop.win, 3, 0, &scop_key_release, &scop);
 	mlx_mouse_hook(scop.win, &scop_mouse_press, &scop);
 	mlx_hook(scop.win, 5, 0, &scop_mouse_release, &scop);
-	mlx_hook(scop.win, 6, 0, &scop_mouse_motion, &scop); 
+	mlx_hook(scop.win, 6, 0, &scop_mouse_motion, &scop);
 	mlx_loop_hook(scop.mlx, &scop_loop, &scop);
 	mlx_loop(scop.mlx);
 	return (0);

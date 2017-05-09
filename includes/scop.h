@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:10:10 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/06 17:17:44 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/09 16:03:08 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 # define KEY_RIGHT 124
 # define KEY_ESCAPE 53
 # define KEY_T 17
+# define KEY_PLUS 69
+# define KEY_MOINS 78
 
 # define MOUSE_L 1
 # define MOUSE_R 2
@@ -42,19 +44,19 @@
 # define MOUSE_SD 4
 # define MOUSE_SU 5
 
-static const GLfloat g_color_buffer_data[] = { 
-	34/255.0f, 34/255.0f, 34/255.0f,
-	34/255.0f, 34/255.0f, 34/255.0f,
-	34/255.0f, 34/255.0f, 34/255.0f,
-	68/255.0f, 68/255.0f, 68/255.0f,
-	68/255.0f, 68/255.0f, 68/255.0f,
-	68/255.0f, 68/255.0f, 68/255.0f,
-	102/255.0f, 102/255.0f, 102/255.0f,
-	102/255.0f, 102/255.0f, 102/255.0f,
-	102/255.0f, 102/255.0f, 102/255.0f,
-	136/255.0f, 136/255.0f, 136/255.0f,
-	136/255.0f, 136/255.0f, 136/255.0f,
-	136/255.0f, 136/255.0f, 136/255.0f
+static const GLfloat g_color_buffer_data[] = {
+	34 / 255.0f, 34 / 255.0f, 34 / 255.0f,
+	34 / 255.0f, 34 / 255.0f, 34 / 255.0f,
+	34 / 255.0f, 34 / 255.0f, 34 / 255.0f,
+	68 / 255.0f, 68 / 255.0f, 68 / 255.0f,
+	68 / 255.0f, 68 / 255.0f, 68 / 255.0f,
+	68 / 255.0f, 68 / 255.0f, 68 / 255.0f,
+	102 / 255.0f, 102 / 255.0f, 102 / 255.0f,
+	102 / 255.0f, 102 / 255.0f, 102 / 255.0f,
+	102 / 255.0f, 102 / 255.0f, 102 / 255.0f,
+	136 / 255.0f, 136 / 255.0f, 136 / 255.0f,
+	136 / 255.0f, 136 / 255.0f, 136 / 255.0f,
+	136 / 255.0f, 136 / 255.0f, 136 / 255.0f
 };
 
 typedef struct		s_gl
@@ -99,6 +101,7 @@ typedef struct		s_scop
 	float			phi;
 	t_vec			pos;
 	int				is_textured;
+	float			coef_zoom;
 }					t_scop;
 
 typedef struct		s_lobj
@@ -113,7 +116,7 @@ typedef struct		s_lobj
 
 float				scop_center_obj(t_scop *scop);
 
-char				*scop_gen_color(t_scop *scop);
+void				scop_gen_color(t_scop *scop);
 void				scop_gen_uvs(t_scop *scop);
 void				scop_gen_normals(t_scop *scop);
 
@@ -126,6 +129,7 @@ void				scop_key_event(t_scop *scop);
 int					scop_loop(t_scop *scop);
 
 void				ft_perror_exit(const char *str);
+void				ft_exit(const char *str);
 
 int					scop_mouse_release(int keycode, int x, int y, t_scop *scop);
 int					scop_mouse_press(int keycode, int x, int y, t_scop *scop);

@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/31 11:45:10 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/06 16:33:13 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/08 12:16:29 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ static void		compile_shader(char *file, GLuint shader_id, char *err)
 		ft_perror_exit(err);
 	if ((size = lseek(fd, 0, SEEK_END)) == -1)
 		ft_perror_exit(err);
-	if ((ptr = mmap(0, size, PROT_WRITE|PROT_READ,MAP_PRIVATE, fd, 0)) \
+	if ((ptr = mmap(0, size, PROT_WRITE | PROT_READ, MAP_PRIVATE, fd, 0)) \
 			== MAP_FAILED)
 		ft_perror_exit(err);
-	glShaderSource(shader_id, 1, &ptr , NULL);
+	glShaderSource(shader_id, 1, &ptr, NULL);
 	glCompileShader(shader_id);
 	glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &log_len);
 	if (log_len > 0)

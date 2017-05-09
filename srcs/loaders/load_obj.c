@@ -6,32 +6,34 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/29 17:41:29 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/06 15:29:17 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/09 16:03:16 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
 
-static void	tidy_vertices_part(t_vector *v_id, t_vector *v_tmp, t_vector *v, int n)
+static void	tidy_vertices_part(t_vector *v_id, t_vector *v_tmp, t_vector *v, \
+																		int n)
 {
 	int				i;
 	int				size;
-	unsigned int	a;
+	unsigned int	*a;
 	float			*b;
 
 	i = 0;
 	size = vector_size(v_id);
+	a = (unsigned int *)vector_get(v_id, i);
 	while (i < size)
 	{
-		a = *(unsigned int *)vector_get(v_id, i);
-		b = (float *)vector_get(v_tmp, ((a - 1) * n));
+		b = (float *)vector_get(v_tmp, ((*a - 1) * n));
 		if (!b)
-			ft_perror_exit("Error in tidy_vertices");
+			ft_exit("Error in tidy_vertices");
 		vector_set(v, &b[0]);
 		vector_set(v, &b[1]);
 		if (n == 3)
 			vector_set(v, &b[2]);
 		i++;
+		a++;
 	}
 }
 
@@ -40,9 +42,11 @@ static void	tidy_vertices(t_scop *scop, t_lobj *lobj)
 	vector_make(&scop->obj.vertices, 1024, sizeof(float));
 	vector_make(&scop->obj.uvs, 1024, sizeof(float));
 	vector_make(&scop->obj.normals, 1024, sizeof(float));
-	tidy_vertices_part(&lobj->vertex_id, &lobj->temp_vertices, &scop->obj.vertices, 3);
+	tidy_vertices_part(&lobj->vertex_id, &lobj->temp_vertices, \
+						&scop->obj.vertices, 3);
 	tidy_vertices_part(&lobj->uv_id, &lobj->temp_uvs, &scop->obj.uvs, 2);
-	tidy_vertices_part(&lobj->normal_id, &lobj->temp_normals, &scop->obj.normals, 3);
+	tidy_vertices_part(&lobj->normal_id, &lobj->temp_normals, \
+						&scop->obj.normals, 3);
 	vector_delete(&lobj->vertex_id);
 	vector_delete(&lobj->uv_id);
 	vector_delete(&lobj->normal_id);
@@ -93,7 +97,7 @@ static void	load_faces(t_lobj *lobj, char **cut, char *line)
 void		load_obj(t_scop *scop, char *path)
 {
 	t_lobj	lobj;
-	int 	fd;
+	int		fd;
 	char	*line;
 	char	**cut;
 

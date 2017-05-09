@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/28 14:20:53 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/06 15:20:42 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/09 15:50:35 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int			scop_key_press(int keycode, t_scop *scop)
 
 void		scop_key_event(t_scop *scop)
 {
-	static float keySpeed = 0.1f;
+	static float speed = 0.03f;
 
 	if (scop->mk.key[KEY_ESCAPE])
 		exit(0);
@@ -37,11 +37,17 @@ void		scop_key_event(t_scop *scop)
 		scop->mk.key[KEY_T] = 2;
 	}
 	if (scop->mk.key[KEY_UP] == 1)
-		scop->pos.y -= keySpeed;
+		scop->pos.y += speed * scop->coef_zoom;
 	if (scop->mk.key[KEY_DOWN] == 1)
-		scop->pos.y += keySpeed;
+		scop->pos.y -= speed * scop->coef_zoom;
 	if (scop->mk.key[KEY_LEFT] == 1)
-		scop->pos.x += keySpeed;
+		scop->pos.x -= speed * scop->coef_zoom;
 	if (scop->mk.key[KEY_RIGHT] == 1)
-		scop->pos.x -= keySpeed;
+		scop->pos.x += speed * scop->coef_zoom;
+	if (scop->mk.key[KEY_PLUS] == 1)
+		scop->pos.z += speed * scop->coef_zoom;
+	if (scop->mk.key[KEY_MOINS] == 1)
+		scop->pos.z -= speed * scop->coef_zoom;
+	if (scop->pos.z > 1)
+		scop->pos.z = 1;
 }

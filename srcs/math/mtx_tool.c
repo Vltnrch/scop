@@ -6,36 +6,38 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 12:22:13 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/06 14:31:16 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/08 12:33:34 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mtx.h"
 
-t_mtx	mtx_perspective(float fovy, float aspect, float zNear, float zFar)
+t_mtx	mtx_perspective(float fovy, float aspect, float znear, float zfar)
 {
-	float	tanHalfFovy;
+	float	tanhalffovy;
 	t_mtx	result;
 
 	result = mtx_make_44(0.0f);
-	tanHalfFovy = tan(fovy / (float)2);
-	result.m[0] = 1 / (aspect * tanHalfFovy);
-	result.m[5] = 1 / (tanHalfFovy);
+	tanhalffovy = tan(fovy / (float)2);
+	result.m[0] = 1 / (aspect * tanhalffovy);
+	result.m[5] = 1 / (tanhalffovy);
 	result.m[11] = -1;
-	result.m[10] = zFar / (zNear - zFar);
-	result.m[14] = -(zFar * zNear) / (zFar - zNear);
+	result.m[10] = zfar / (znear - zfar);
+	result.m[14] = -(zfar * znear) / (zfar - znear);
 	return (result);
 }
 
-
 t_mtx	mtx_lookat(t_vec eye, t_vec center, t_vec up)
 {
-	t_vec	f = vec_normalize(vec_sub(center, eye));
-	t_vec	s = vec_normalize(vec_cross(f, up));
-	t_vec	u = vec_cross(s, f);
+	t_vec	f;
+	t_vec	s;
+	t_vec	u;
 	t_mtx	result;
 
 	result = mtx_make_44(1.0f);
+	f = vec_normalize(vec_sub(center, eye));
+	s = vec_normalize(vec_cross(f, up));
+	u = vec_cross(s, f);
 	result.m[0] = s.x;
 	result.m[4] = s.y;
 	result.m[8] = s.z;
@@ -67,7 +69,7 @@ t_mtx	mtx_translate(t_mtx m, t_vec v)
 	result.m[13] = m.m[1] * v.x + m.m[5] * v.y + m.m[9] * v.z + m.m[13];
 	result.m[14] = m.m[2] * v.x + m.m[6] * v.y + m.m[10] * v.z + m.m[14];
 	result.m[15] = m.m[3] * v.x + m.m[7] * v.y + m.m[11] * v.z + m.m[15];
-	return result;
+	return (result);
 }
 
 t_mtx	mtx_rotate_result(t_mtx m, t_mtx r)
@@ -91,7 +93,7 @@ t_mtx	mtx_rotate_result(t_mtx m, t_mtx r)
 	result.m[13] = m.m[13];
 	result.m[14] = m.m[14];
 	result.m[15] = m.m[15];
-	return result;
+	return (result);
 }
 
 t_mtx	mtx_rotate(t_mtx m, float a, t_vec v)

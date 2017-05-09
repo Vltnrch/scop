@@ -22,8 +22,8 @@ void main()
 	
 	// Material properties
 	vec3 MaterialDiffuseColor = fragmentColor;
-	vec3 MaterialAmbientColor = vec3(0.3, 0.3, 0.3) * MaterialDiffuseColor;
-	vec3 MaterialSpecularColor = vec3(0.8, 0.8, 0.8);
+	vec3 MaterialAmbientColor = vec3(0.9, 0.9, 0.9) * MaterialDiffuseColor;
+	vec3 MaterialSpecularColor = vec3(0.9, 0.9, 0.9);
 
 	// Distance to the light
 	float distance = length(LightPosition_worldspace - Position_worldspace);
