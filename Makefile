@@ -6,7 +6,7 @@
 #    By: vroche <vroche@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/03/16 10:49:38 by vroche            #+#    #+#              #
-#    Updated: 2017/05/06 15:31:41 by vroche           ###   ########.fr        #
+#    Updated: 2017/05/10 11:04:30 by vroche           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LIB = -framework OpenGL -framework AppKit \
 
 HDR = -I./minilibx_macos -I./libft/includes -I./includes
 
-FLAGS = -Wall -Wextra -Werror -g
+FLAGS = -Wall -Wextra -Werror -g -O3
 
 C = srcs/main.c \
 	srcs/scop_center_obj.c \

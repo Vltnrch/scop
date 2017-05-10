@@ -6,7 +6,7 @@
 #    By: vroche <vroche@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/06 17:32:05 by vroche            #+#    #+#              #
-#    Updated: 2017/05/03 16:01:03 by vroche           ###   ########.fr        #
+#    Updated: 2017/05/10 11:04:41 by vroche           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = libft.a
 
 HDR = -I./includes
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g -O3
 
 CLIB = is/ft_isalnum.c \
 	is/ft_isalpha.c \

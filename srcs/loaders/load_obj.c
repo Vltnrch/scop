@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/29 17:41:29 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/09 16:03:16 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/10 11:21:27 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,23 @@ static void	tidy_vertices_part(t_vector *v_id, t_vector *v_tmp, t_vector *v, \
 {
 	int				i;
 	int				size;
-	unsigned int	*a;
+	uint64_t		*a;
 	float			*b;
 
 	i = 0;
 	size = vector_size(v_id);
-	a = (unsigned int *)vector_get(v_id, i);
+	a = (uint64_t *)vector_get(v_id, i);
 	while (i < size)
 	{
-		b = (float *)vector_get(v_tmp, ((*a - 1) * n));
-		if (!b)
+		if (!(b = (float *)vector_get(v_tmp, ((*a - 1) * n))))
 			ft_exit("Error in tidy_vertices");
-		vector_set(v, &b[0]);
-		vector_set(v, &b[1]);
+		if (!(vector_set(v, &b[0])))
+			ft_perror_exit("vector_set tidy_vertices_part b[0]");
+		if (!(vector_set(v, &b[1])))
+			ft_perror_exit("vector_set tidy_vertices_part b[1]");
 		if (n == 3)
-			vector_set(v, &b[2]);
+			if (!(vector_set(v, &b[2])))
+				ft_perror_exit("vector_set tidy_vertices_part b[2]");
 		i++;
 		a++;
 	}
@@ -101,9 +103,9 @@ void		load_obj(t_scop *scop, char *path)
 	char	*line;
 	char	**cut;
 
-	vector_make(&lobj.vertex_id, 1024, sizeof(unsigned int));
-	vector_make(&lobj.uv_id, 1024, sizeof(unsigned int));
-	vector_make(&lobj.normal_id, 1024, sizeof(unsigned int));
+	vector_make(&lobj.vertex_id, 1024, sizeof(uint64_t));
+	vector_make(&lobj.uv_id, 1024, sizeof(uint64_t));
+	vector_make(&lobj.normal_id, 1024, sizeof(uint64_t));
 	vector_make(&lobj.temp_vertices, 1024, sizeof(float));
 	vector_make(&lobj.temp_uvs, 1024, sizeof(float));
 	vector_make(&lobj.temp_normals, 1024, sizeof(float));
