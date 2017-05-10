@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/06 14:39:06 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/09 14:55:39 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/10 12:25:59 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	scop_gen_color(t_scop *scop)
 {
-	char	*color;
-	size_t	i;
-	size_t	size;
+	char		*color;
+	uint64_t	i;
+	uint64_t	size;
 
 	size = vector_size(&scop->obj.vertices) * sizeof(float);
 	color = (char *)malloc(size);
@@ -65,10 +65,10 @@ void	scop_gen_color(t_scop *scop)
 
 void	scop_gen_uvs(t_scop *scop)
 {
-	int		i;
-	float	*p;
-	int		size;
-	float	phi;
+	uint64_t	i;
+	float		*p;
+	uint64_t	size;
+	float		phi;
 
 	i = 0;
 	size = vector_size(&scop->obj.vertices);
@@ -85,10 +85,10 @@ void	scop_gen_uvs(t_scop *scop)
 
 void	scop_gen_normals(t_scop *scop)
 {
-	int		i;
-	float	*p;
-	int		size;
-	t_vec	vec;
+	uint64_t	i;
+	float		*p;
+	uint64_t	size;
+	t_vec		vec;
 
 	i = 0;
 	size = vector_size(&scop->obj.vertices);

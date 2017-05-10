@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 12:30:50 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/08 13:13:26 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/10 12:25:22 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 static void		scop_center_obj_set(t_scop *scop, float *v)
 {
-	int		i;
-	float	r;
-	float	*p;
-	int		size;
+	uint64_t	i;
+	float		r;
+	float		*p;
+	uint64_t	size;
 
 	i = 0;
 	size = vector_size(&scop->obj.vertices);
@@ -37,10 +37,10 @@ static void		scop_center_obj_set(t_scop *scop, float *v)
 
 static float	scop_minpos_obj(t_scop *scop)
 {
-	int		i;
-	int		size;
-	float	*p;
-	float	max;
+	uint64_t	i;
+	uint64_t	size;
+	float		*p;
+	float		max;
 
 	i = 0;
 	max = 0.0f;
@@ -58,10 +58,10 @@ static float	scop_minpos_obj(t_scop *scop)
 
 float			scop_center_obj(t_scop *scop)
 {
-	float	v[3];
-	int		i;
-	int		size;
-	float	*p;
+	float		v[3];
+	uint64_t	i;
+	uint64_t	size;
+	float		*p;
 
 	v[0] = 0;
 	v[1] = 0;

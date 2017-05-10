@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/29 17:41:29 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/10 11:21:27 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/10 16:37:18 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,21 @@
 static void	tidy_vertices_part(t_vector *v_id, t_vector *v_tmp, t_vector *v, \
 																		int n)
 {
-	int				i;
-	int				size;
-	uint64_t		*a;
-	float			*b;
+	uint64_t	i;
+	uint64_t	size_id;
+	uint64_t	size_tmp;
+	int64_t		*a;
+	float		*b;
 
 	i = 0;
-	size = vector_size(v_id);
-	a = (uint64_t *)vector_get(v_id, i);
-	while (i < size)
+	size_id = vector_size(v_id);
+	size_tmp = vector_size(v_tmp) / n;
+	if (!(a = (int64_t *)vector_get(v_id, i)))
+		ft_exit("Error in tidy_vertices, var a");
+	while (i < size_id)
 	{
-		if (!(b = (float *)vector_get(v_tmp, ((*a - 1) * n))))
-			ft_exit("Error in tidy_vertices");
+		if (!(b = (float *)vector_get(v_tmp, ((*a > 0 ? *a - 1 : size_tmp + *a) * n))))
+			ft_exit("Error in tidy_vertices, var b");
 		if (!(vector_set(v, &b[0])))
 			ft_perror_exit("vector_set tidy_vertices_part b[0]");
 		if (!(vector_set(v, &b[1])))
@@ -103,9 +106,9 @@ void		load_obj(t_scop *scop, char *path)
 	char	*line;
 	char	**cut;
 
-	vector_make(&lobj.vertex_id, 1024, sizeof(uint64_t));
-	vector_make(&lobj.uv_id, 1024, sizeof(uint64_t));
-	vector_make(&lobj.normal_id, 1024, sizeof(uint64_t));
+	vector_make(&lobj.vertex_id, 1024, sizeof(int64_t));
+	vector_make(&lobj.uv_id, 1024, sizeof(int64_t));
+	vector_make(&lobj.normal_id, 1024, sizeof(int64_t));
 	vector_make(&lobj.temp_vertices, 1024, sizeof(float));
 	vector_make(&lobj.temp_uvs, 1024, sizeof(float));
 	vector_make(&lobj.temp_normals, 1024, sizeof(float));

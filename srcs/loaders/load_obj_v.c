@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/03 17:58:54 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/10 11:24:46 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/10 15:35:35 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void		load_v(t_lobj *lobj, char **cut)
 {
-	int		count;
-	int		convert[4];
+	int			count;
+	int64_t	convert[4];
 
 	count = 1;
 	while (count <= 4 && cut[count])
 	{
-		convert[(count - 1)] = strtoull(cut[count], NULL, 10);
+		convert[(count - 1)] = strtoll(cut[count], NULL, 10);;
 		if (count == 4)
 		{
 			vector_set(&lobj->vertex_id, &convert[0]);
@@ -33,9 +33,9 @@ void		load_v(t_lobj *lobj, char **cut)
 
 static void	load_vn_part(t_vector *v, char **param, int count, int i)
 {
-	static int	convert[8];
+	static int64_t	convert[8];
 
-	convert[(count - 1) * 2 + i] = strtoull(param[i], NULL, 10);
+	convert[(count - 1) * 2 + i] = strtoll(param[i], NULL, 10);
 	if (count == 4)
 	{
 		vector_set(v, &convert[0 + i]);
@@ -64,9 +64,9 @@ void		load_vn(t_lobj *lobj, char **cut)
 
 static void	load_vun_part(t_vector *v, char **param, uint64_t count, uint64_t i)
 {
-	static uint64_t	convert[12];
+	static int64_t	convert[12];
 
-	convert[(count - 1) * 3 + i] = strtoull(param[i], NULL, 10);
+	convert[(count - 1) * 3 + i] = strtoll(param[i], NULL, 10);
 	if (count == 4)
 	{
 		vector_set(v, &convert[0 + i]);
