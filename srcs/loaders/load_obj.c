@@ -28,15 +28,13 @@ static void	tidy_vertices_part(t_vector *v_id, t_vector *v_tmp, t_vector *v, \
 		ft_exit("Error in tidy_vertices, var a");
 	while (i < size_id)
 	{
-		if (!(b = (float *)vector_get(v_tmp, ((*a > 0 ? *a - 1 : size_tmp + *a) * n))))
+		if (!(b = (float *)vector_get(v_tmp, \
+					((*a > 0 ? *a - 1 : size_tmp + *a) * n))))
 			ft_exit("Error in tidy_vertices, var b");
-		if (!(vector_set(v, &b[0])))
-			ft_perror_exit("vector_set tidy_vertices_part b[0]");
-		if (!(vector_set(v, &b[1])))
-			ft_perror_exit("vector_set tidy_vertices_part b[1]");
+		vector_set(v, &b[0]);
+		vector_set(v, &b[1]);
 		if (n == 3)
-			if (!(vector_set(v, &b[2])))
-				ft_perror_exit("vector_set tidy_vertices_part b[2]");
+			vector_set(v, &b[2]);
 		i++;
 		a++;
 	}

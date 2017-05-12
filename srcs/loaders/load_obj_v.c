@@ -14,13 +14,13 @@
 
 void		load_v(t_lobj *lobj, char **cut)
 {
-	int			count;
+	int		count;
 	int64_t	convert[4];
 
 	count = 1;
 	while (count <= 4 && cut[count])
 	{
-		convert[(count - 1)] = strtoll(cut[count], NULL, 10);;
+		convert[(count - 1)] = strtoll(cut[count], NULL, 10);
 		if (count == 4)
 		{
 			vector_set(&lobj->vertex_id, &convert[0]);
