@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/28 14:20:53 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/09 15:50:35 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/15 12:49:27 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void		scop_key_event(t_scop *scop)
 	static float speed = 0.03f;
 
 	if (scop->mk.key[KEY_ESCAPE])
-		exit(0);
+		ft_quit(scop);
 	if (scop->mk.key[KEY_T] == 1)
 	{
 		scop->is_textured = !scop->is_textured ? 1 : 0;

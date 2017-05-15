@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 17:10:10 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/09 16:03:08 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/15 13:25:58 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include "math.h"
 # include <fcntl.h>
 # include <sys/mman.h>
+# include <sys/time.h>
 
 # define WIDTH 1024
 # define HEIGHT 768
@@ -61,6 +62,7 @@ static const GLfloat g_color_buffer_data[] = {
 
 typedef struct		s_gl
 {
+	GLuint			vertexarrayid;
 	GLuint			program_id;
 	GLuint			program_t_id;
 	GLuint			texture_id;
@@ -128,8 +130,10 @@ void				scop_key_event(t_scop *scop);
 
 int					scop_loop(t_scop *scop);
 
+void				scop_fps(void);
 void				ft_perror_exit(const char *str);
 void				ft_exit(const char *str);
+void				ft_quit(t_scop *scop);
 
 int					scop_mouse_release(int keycode, int x, int y, t_scop *scop);
 int					scop_mouse_press(int keycode, int x, int y, t_scop *scop);

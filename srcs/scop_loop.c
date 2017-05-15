@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 12:41:08 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/09 15:58:00 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/15 13:25:34 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,6 @@ int				scop_loop(t_scop *scop)
 			scop->phi, vec_make(1.0f, 0.0f, 0.0f)), \
 		scop->theta, vec_make(0.0f, 1.0f, 0.0f));
 	scop_draw(scop);
+	scop_fps();
 	return (0);
 }

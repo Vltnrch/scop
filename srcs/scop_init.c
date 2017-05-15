@@ -6,7 +6,7 @@
 /*   By: vroche <vroche@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/30 17:04:32 by vroche            #+#    #+#             */
-/*   Updated: 2017/05/10 16:44:46 by vroche           ###   ########.fr       */
+/*   Updated: 2017/05/15 13:23:59 by vroche           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,12 @@ static void	scop_init_mlx(t_scop *scop)
 	ft_bzero(&(scop->mk.mouse), 6 * sizeof(char));
 }
 
-static void	scop_init_gl(void)
+static void	scop_init_gl(t_scop *scop)
 {
 	const GLubyte	*vendor;
 	const GLubyte	*renderer;
 	const GLubyte	*version;
 	const GLubyte	*shading;
-	GLuint			vertexarrayid;
 
 	vendor = glGetString(GL_VENDOR);
 	renderer = glGetString(GL_RENDERER);
@@ -61,8 +60,8 @@ static void	scop_init_gl(void)
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 	glEnable(GL_STENCIL_TEST);
-	glGenVertexArrays(1, &vertexarrayid);
-	glBindVertexArray(vertexarrayid);
+	glGenVertexArrays(1, &(scop->gl.vertexarrayid));
+	glBindVertexArray(scop->gl.vertexarrayid);
 }
 
 static void	scop_init_gl_buffer(t_scop *scop)
@@ -91,14 +90,17 @@ static void	scop_init_gl_buffer(t_scop *scop)
 
 void		scop_init(t_scop *scop, char **av)
 {
+	float	max;
+
 	load_obj(scop, av[1]);
 	scop_init_struct(scop);
 	scop_init_mlx(scop);
-	scop_init_gl();
+	scop_init_gl(scop);
 	if (av[2])
 		load_texture(scop, av[2]);
-	scop->pos.z = -scop_center_obj(scop) - 5;
-	scop->coef_zoom = fabs(scop->pos.z / 5.0);
+	max = scop_center_obj(scop);
+	scop->coef_zoom = fabs(max / 5.0);
+	scop->pos.z -= 15 * scop->coef_zoom;
 	if (!vector_size(&scop->obj.uvs))
 		scop_gen_uvs(scop);
 	if (!vector_size(&scop->obj.normals))
